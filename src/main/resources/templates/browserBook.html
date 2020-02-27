@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/ordinaryNav::odinaryNav_header(~{::title},~{},~{::style},~{::script})">
+    <meta charset="UTF-8">
+    <title th:text="${book.getName()}">图书详情</title>
+    <style>
+        .di-m-bb{width: 70%;margin: 40px auto 50px auto; text-align: center;}
+        .di-m-bb img{width: 400px;}
+        .di-m-bb div{text-align: left;}
+        .di-m-bb-ad{text-align: center;}
+        .bt-deleteBookFromDesk{display: none;margin: auto;}
+
+        .di-m-addComment{width: 660px; margin: 60px auto auto;}
+        .addComment{height: 100px; width: 600px; font-size: 16px;}
+
+        .show-m-comments{width: 70%; margin: 20px auto auto;}
+        .cm-editorDate{margin-left: 30px;}
+        .cm-content{padding-left: 50px; margin-top: 10px;}
+    </style>
+
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <script th:inline="javascript">
+        $(function () {
+
+            let userMark = $(".userMark").val();
+            if (userMark !== ""){
+                $(".bt-addBookToDesk").css("display","none");
+                $(".bt-deleteBookFromDesk").css("display","block");
+
+            }
+
+            let bId = "bId=" + $(".bId").val();
+            let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+
+            $(".bt-addBookToDesk").click(function () {
+                $.ajax({
+                    url:"user/addMyDesk",
+                    data:bId,
+                    success:function (data) {
+                        // console.log("图书浏览，添加到书桌请求发送成功");
+                        alert(data.result);
+                        if (data.mark != "true"){
+                            let tempWindow=window.open('_blank');
+                            tempWindow.location = ctxPath + "/login";
+                        }
+                        else {
+
+                        }
+                    }
+                });
+            });
+
+            $(".bt-addComment").click(function () {
+                if($(".top-di-userInfo span").text()!==""){
+                    if ($(".addComment").val()!==""){
+                        let bId = $(".bId").val();
+                        let cmContent = $(".addComment").val();
+                        $.ajax({
+                            url:"user/addBookComment",
+                            data:{"bId":bId,"cmContent":cmContent},
+                            success:function (data) {
+                                alert(data.result);
+                                if (data.mark === "true"){
+                                    window.location.href = ctxPath + "/browserBook?bId="+$(".bId").val();
+                                }
+                            }
+                        });
+                    }else alert("评论不可为空");
+                }else {
+                    let tempWindow=window.open('_blank');
+                    tempWindow.location = ctxPath + "/login";
+                }
+
+            });
+
+
+        })
+    </script>
+</head>
+<body>
+<div th:replace="public/ordinaryNav::nav"></div>
+
+<input class="userMark" type="hidden" th:value="${userMark}">
+    <div class="di-m-bb">
+        <h1 th:text="${book.getName()}"></h1>
+        <img th:src="${book.getCoverPhotoUrl()}">
+        <div>作者：<span th:text="${book.getAuthor()}"></span><br>
+            出版社：<span th:text="${book.getPublication()}"></span><br>
+            出版时间：<span th:text="${book.getPublicationDate()}"></span><br>
+        </div>
+        <div th:text="${book.getDigest()}" style="margin-top: 40px;"></div>
+    </div>
+
+    <div class="di-m-bb-ad">
+
+        <button class="bt-addBookToDesk">添加到书桌</button>
+        <form action="user/removeFromDesk">
+            <input type="hidden" th:value="${book.getbId()}" class="bId" name="bId">
+            <button class="bt-deleteBookFromDesk">移除图书</button>
+        </form>
+
+    </div>
+
+    <div class="di-m-addComment">
+        <textarea class="addComment" maxlength="200"></textarea><button class="bt-addComment">添加新评论</button>
+    </div>
+
+    <div class="show-m-comments" th:each="comment : ${bComments}">
+        <div style="background-color: #F3F5F7;"><span class="cm-author" th:text="${comment.getAuthor()}"></span><span class="cm-editorDate" th:text="${comment.getCmEditorDate()}"></span></div>
+        <div class="cm-content" th:text="${comment.getCmContent()}">
+
+        </div>
+    </div>
+
+    <div style="height: 200px;">
+
+    </div>
+</body>
+</html>

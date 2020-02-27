@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/ordinaryNav::odinaryNav_header(~{::title},~{::link},~{::style},~{::script})">
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link th:href="${#request.getContextPath()+'/css/index.css'}" rel="stylesheet" type="text/css"/>
+    <style>
+        hr{background-color: firebrick;border: none; height: 1px;}
+    </style>
+    <script th:inline="javascript">
+        $(function () {
+            let s1 = setInterval(function(){
+                $(".di-first2").fadeToggle(1000)
+            }, 6000);
+
+            $(".di-center").mouseover(function () {
+                clearInterval(s1);
+
+            }).mouseout(function () {
+                s1 = setInterval(function(){
+                    $(".di-first2").fadeToggle(1000)
+                }, 6000);
+            });
+
+
+            $(".di-first1 #di-left1,#h-title1,#h-digest1").click(function () {
+                let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+                // window.location.href = ctxPath + "/browserArticle?aId="+$(".di-first1 .h-aId").val();
+                let tempWindow=window.open('_blank');
+                tempWindow.location = ctxPath + "/browserArticle?aId="+$(".di-first1 .h-aId").val();
+
+            });
+            $(".di-first2 #di-left2,#h-title2,#h-digest2").click(function () {
+                let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+                let tempWindow=window.open('_blank');
+                tempWindow.location = ctxPath + "/browserArticle?aId="+$(".di-first2 .h-aId").val();
+            });
+
+            $(".r-title, .a-coverPhoto").click(function () {
+                // console.log($(this).parent().children(":first").val());
+                let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+                let tempWindow=window.open('_blank');
+                tempWindow.location = ctxPath + "/browserArticle?aId=" + $(this).parent().children(":first").val();
+            });
+
+            $(".latest-book-coverPhoto").click(function () {
+                let tempWindow=window.open('_blank');
+                let ctxPath = [[${#request.getContextPath()}]];
+                tempWindow.location = ctxPath + "/browserBook?bId=" + $(this).children(":first").val();
+            })
+        });
+
+    </script>
+
+</head>
+<body>
+
+<div th:replace="public/ordinaryNav::nav"> </div>
+
+<div class="di-main1">
+    <div class = "di-first1">
+        <input type="hidden" th:value="${first.getaId()}" class="h-aId">
+        <div class = "di-center">
+            <div class="di-left" id = "di-left1">
+<!--                <img th:src="${#request.getContextPath()+'/images/a.png'}" alt="全速加载中">-->
+                <img th:src="${first.getCoverPhotoUrl()}" alt="全速加载中">
+            </div>
+
+            <div class="di-right">
+                <span th:text="${first.getcValue()}">分类</span><br><br>
+
+                <span class="h-title" th:text="${first.getTitle()}" id = "h-title1">标题</span>
+                <hr>
+<!--                <div><span th:text="">作者</span><span class="a-time">time</span></div>-->
+                <div><span class="h-time" th:text="${first.getEditorDate()}">time</span></div>
+                <br>
+                <br>
+                <span class="h-digest" th:text="${first.getDigest()}" id = "h-digest1">digest</span>
+            </div>
+        </div>
+    </div>
+
+    <div class = "di-first2">
+        <div class = "di-center">
+            <input type="hidden" th:value="${second.getaId()}" class="h-aId">
+            <div class="di-left" id="di-left2">
+<!--                <img th:src="${#request.getContextPath()+'/images/50.PNG'}" alt="全速加载中">-->
+                <img th:src="${second.getCoverPhotoUrl()}" alt="全速加载中">
+            </div>
+            <div class="di-right">
+                <span th:text="${second.getcValue()}">分类</span><br><br>
+
+                <span class="h-title" th:text="${second.getTitle()}" id = "h-title2">标题</span>
+                <hr>
+                <div><span class="h-time" th:text="${second.getEditorDate()}">time</span></div>
+                <br>
+                <br>
+                <span class="h-digest" th:text="${second.getDigest()}" id = "h-digest2">digest</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+<hr>
+<div class = "di-main2">
+    <div class = "main2">
+        <div class="main2-left">
+            <div class="ml-one">
+                <input type="hidden" th:value="${third.getaId()}">
+                <span th:text="${third.getcValue()}">classification</span><div class="r-title" th:text="${third.getTitle()}">标题</div>
+                <hr>
+                <div class="a-coverPhoto">
+                    <img th:src="${third.getCoverPhotoUrl()}">
+                </div>
+                <div class="di-one-digest" th:text="${third.getDigest()}">
+
+                </div>
+                <hr>
+                <div class="di-one-arInfo"><spa>作者</spa><span th:text="${third.getEditorDate()}">时间</span><span>评论</span></div>
+            </div>
+            <div class="ml-one">
+                <input type="hidden" th:value="${fourth.getaId()}">
+                <span th:text="${fourth.getcValue()}">classification</span><div class="r-title" th:text="${fourth.getTitle()}">标题</div>
+                <hr>
+                <div class="a-coverPhoto">
+                    <img th:src="${fourth.getCoverPhotoUrl()}">
+                </div>
+                <div class="di-one-digest" th:text="${fourth.getDigest()}">
+
+                </div>
+                <hr>
+                <div class="di-one-arInfo"><spa>作者</spa><span th:text="${fourth.getEditorDate()}">时间</span><span>评论</span></div>
+            </div>
+            <div class="ml-one">
+                <input type="hidden" th:value="${fifth.getaId()}">
+                <span th:text="${fifth.getcValue()}">classification</span><div class="r-title" th:text="${fifth.getTitle()}">标题</div>
+                <hr>
+                <div class="a-coverPhoto">
+                    <img th:src="${fifth.getCoverPhotoUrl()}">
+                </div>
+                <div class="di-one-digest" th:text="${fifth.getDigest()}">
+
+                </div>
+                <hr>
+                <div class="di-one-arInfo"><spa>作者</spa><span th:text="${fifth.getEditorDate()}">时间</span><span>评论</span></div>
+            </div>
+            
+
+
+        </div>
+        <div class="main2-right">
+            <div class="mr-one">
+                <span>经典语句</span>
+                <hr>
+                <div th:text="${classicSaying.getContent()}">
+
+                </div>
+                <br>
+                <div th:text="'----'+${classicSaying.getProvenance()}" style="text-align: right"></div>
+            </div>
+            <div class="mr-one">
+                <span>最新收录</span>
+                <hr>
+                <div class="latest-book-coverPhoto">
+                    <input type="hidden" th:value="${latestBook.getbId()}">
+<!--                    <img th:src="${#request.getContextPath()+'/images/50.PNG'}" alt="全速加载中">-->
+                    <img th:src="${latestBook.getCoverPhotoUrl()}" alt="全速加载中">
+                </div>
+                <div class="latest-book-name" th:text="'<< '+${latestBook.getName()}+' >>'">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang = "zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <link th:href="${#request.getContextPath() + '/css/style.css'}" rel='stylesheet' type='text/css' />
+    <title>Login</title>
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            $("#account").click(function () {
+                $("#u-msg").css("display","none");
+            });
+            $("#account").blur(function(){
+                let account = $("#account");
+                let re = /[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+                console.log(re.test(account.val()));
+                if(re.test(account.val())){
+                    $("#mark").val("email");
+                    $.get("checkEmail",{email:account.val()},function (data) {
+                        if (data !=="true"){
+                            console.log(data);
+                            $("#u-msg").css("display","block");
+                            account.val("");
+                        }
+                    })
+                }
+                else{
+                    $("#mark").val("username");
+                    $.get("checkUsername",{username:account.val()},function (data) {
+                        if (data ==="false"){
+                            $("#u-msg").css("display","block");
+                            account.val("");
+                        }
+                    })
+                }
+            });
+
+            $("#ch-re").click(function () {
+                if ($("#ch-re").is(":checked")){
+
+                }
+            })
+        })
+    </script>
+
+
+</head>
+<body>
+    <h1>Welcome to Sign In </h1>
+    <div class="w3ls-login box box--big">
+        <!-- form starts here -->
+        <form action="handleLogin" method="post">
+            <div class="agile-field-txt">
+                <div class = "dMsg" th:text="${lMsg}"></div>
+                <label> Account</label>
+                <input type="text" id = "account" name="account" placeholder="Enter Username or Email" required="" th:value="${tUser}" maxlength="32" />
+                <span class="u-msg" id = "u-msg">The username is not exists</span>
+            </div>
+            <div class="agile-field-txt">
+                <label> password</label>
+                <input type="password" name="password" placeholder="Enter Password" required="" id="myInput" maxlength="16" />
+                <div class="agile_label">
+                    <input id="check3" name="check3" type="checkbox" value="show password" onclick="myFunction()">
+                    <label class="check" for="check3">Show password</label>
+                </div>
+                <div class="agile-right">
+                    <a href="">forgot password?</a>
+                </div>
+            </div>
+            <!-- script for show password -->
+            <script>
+                function myFunction() {
+                    let x = document.getElementById("myInput");
+                    if (x.type === "password") {
+                        x.type = "text";
+                    } else {
+                        x.type = "password";
+                    }
+                }
+            </script>
+            <!-- //end script -->
+            <div class="w3ls-bot">
+                <div class="switch-agileits">
+                    <label class="switch">
+                        <input type="checkbox" id = "ch-re">
+                        <span class="slider round"></span>
+                        keep me signed in
+                    </label>
+                </div>
+                <div class="goRegister">
+<!--                    <a href="http://localhost:8080/register">Go To Register</a>-->
+                    <a href="http://wrtcloud.cn:8080/recommendation/register">Go To Register</a>
+                </div>
+            </div>
+            <input type="text" name="mark"  id="mark" style="display: none" th:value="username"/>
+            <input type="submit" value="SIGN IN">
+        </form>
+
+    </div>
+</body>
+</html>

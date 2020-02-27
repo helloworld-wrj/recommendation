@@ -1,0 +1,16 @@
+form{font-size: 18px; width: 86%; margin: 35px auto auto; min-width: 1000px;}
+form>div{margin-top: 35px;}
+.aa-div-mAddTitle input{width: 700px;border: 1px solid firebrick; }
+.aa-div-mSummerNote{}
+
+#digest{width: 700px; height: 150px; border: 1px solid firebrick;}
+
+.aa-div-mCoverPhoto{width: 160px;margin: 30px auto auto; font-weight: bold;margin: -180px 0 0 760px;}
+.c-coverPhoto{width: 180px; height: 140px; }
+.coverPhoto{width: 160px; height: 120px;  border: 1px solid firebrick;background-image: url(https://wrtcloud.cn/images/add.jpg);background-repeat: no-repeat;background-position: center;background-size: 20px}
+.coverPhoto:hover{width: 162px; height: 122px; cursor: pointer;background-size: 21px  }
+
+.aa-div-mClassification{margin: -166px 0 0 950px; }
+.aa-div-mClassification select{border: 1px solid firebrick;}
+
+.aa-div-mSubmit{margin-top: 180px; text-align: center;}

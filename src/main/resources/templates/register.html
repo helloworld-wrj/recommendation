@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang = "zh" xmlns:th="http://www.thymeleaf.org">
+	
+<head>
+	<title>Register</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+	<link th:href="${#request.getContextPath() + '/css/style.css'}" rel='stylesheet' type='text/css' />
+	<script>
+		addEventListener("load", function () {
+			setTimeout(hideURLbar, 0);
+			
+		}, false);
+
+		function hideURLbar() {
+			window.scrollTo(0, 1);
+		}
+
+	</script>
+	<script type="text/javascript">
+		$(function(){
+			$("#username").click(function () {
+				$("#u-msg").css("display","none");
+			});
+		    $("#username").blur(function(){
+		    	let username = $("#username");
+				//Check if the username already exists
+				$.get("checkUsername",{username:username.val()},function (data) {
+					if (data ==="true"){
+						$("#u-msg").css("display","block");
+						username.val("");
+					}
+				});
+
+			});
+
+			$("#email").click(function () {
+				$("#e-msg").css("display","none");
+			});
+			$("#email").blur(function(){
+				let email = $("#email");
+				let eMsg = $("#e-msg");
+				let re = /[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+				console.log(re.test(email.val()));
+				if(re.test(email.val())){
+					$.get("checkEmail",{email:email.val()},function (data) {
+						if (data !=="false"){
+							console.log(data);
+							eMsg.text("The email already exists");
+							eMsg.css("display","block");
+							email.val("");
+						}
+					})
+				}
+				else{
+					eMsg.text("Please enter the correct email format");
+					eMsg.css("display","block");
+					email.val("");
+				}
+			});
+
+			$("#getCode").click(function(){
+				let username = $("#username").val();
+				let email = $("#email").val();
+				let getCode = $("#getCode");
+				if(username!=null && email != null && username !== "" && email !== ""){
+					getCode.attr('disabled',true);
+					$.ajax({
+						url: "register/getCode",
+						cache: false,
+						data:"username="+username+"&&email="+email,
+						success: function(){
+							console.log(2434);
+						}
+					});
+
+					let i = 10;
+					const interval = setInterval(function(){
+						if(i<=0){
+							getCode.html("<b>To Obtain</b>");
+							getCode.attr('disabled',false);
+							clearInterval(interval);
+						}else{
+							getCode.html("<b>To Obtain "+ i + " s </b>");
+							i--;
+						}
+					}, 1000);
+				}
+				else{
+                    alert("please input the username and email");
+				}
+			});
+			
+			
+			$("#code").blur(function(){
+				let code = $("#code");
+				let mark = $("#mark");
+				$.ajax({
+					url: "register/checkCode",
+					cache: false,
+					data:"code="+code.val()+"&&username="+$("#username").val()+"&&email="+$("#email").val(),
+					success: function(data){
+						if (data ==="false"){
+							mark.css("background","url(https://www.wrtcloud.cn/images/false.ico)no-repeat center");
+							code.val("");
+						}
+						else{
+							mark.css("background","url(https://www.wrtcloud.cn/images/true.ico)no-repeat center");
+						}
+					},
+					error:function () {
+						mark.css("background","url(https://www.wrtcloud.cn/images/false.ico)no-repeat center");
+					}
+
+				});
+
+			});
+		});
+		
+	</script>
+	
+
+</head>
+
+<body>
+	<h1>Welcome to Sign In </h1>
+	<div class="w3ls-login box box--big">
+		<!-- form starts here -->
+		<form action="handleRegister" method="post">
+			<div class="agile-field-txt">
+				<div class = "dMsg" th:text="${rMsg}"></div>
+				<label> Username</label>
+				<input type="text" id = "username" name="username" placeholder="Enter User Name" required="" maxlength="16" />
+				<span class="u-msg" id = "u-msg">The username already exists</span>
+			</div>
+			
+			<div class="agile-field-txt">
+				<label>Email</label>
+				<input type="email" id = "email" name="email" placeholder="Enter User Email" required=""  maxlength="32"/>
+				<span class="u-msg" id = "e-msg">The email already exists</span>
+			</div>
+			
+			<div class="agile-field-txt">
+				<label>Verification code <button id = "getCode" class = "bt-getCode"><b>Get the Code</b></button></label>
+				<input type="text" id = "code"name="code" placeholder="Enter the Verification Code" required="" maxlength="6" />
+				<div class = "mark" id = "mark"></div>
+			</div>
+			
+			<div class="agile-field-txt">
+				<label> password</label>
+				<input type="password" name="password" placeholder="Enter Password" required="" id="myInput"  maxlength="16" />
+				<div class="agile_label">
+					<input id="check3" name="check3" type="checkbox" value="show password" onclick="myFunction()">
+					<label class="check" for="check3">Show password</label>
+				</div>
+
+			</div>
+			<!-- script for show password -->
+			<script>
+				function myFunction() {
+					let x = document.getElementById("myInput");
+					if (x.type === "password") {
+						x.type = "text";
+					} else {
+						x.type = "password";
+					}
+				}
+			</script>
+				<input type="submit" value="SIGN IN">
+		</form>
+	</div>
+
+</body>
+</html>

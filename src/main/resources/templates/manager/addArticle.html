@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html   xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/managerNav::managerNav_header(~{::title},~{::link},~{::style},~{::script})">
+    <meta charset="UTF-8"/>
+    <title>addArticle</title>
+
+    <style>
+
+    </style>
+
+    <link rel="stylesheet" type="text/css" th:href="@{../dist/bootstrap.css}">
+    <!--    <script th:src="@{../js/jquery.min.js}"></script>-->
+    <link th:href="@{../dist/summernote.css}" rel="stylesheet">
+    <link th:href="@{../css/article.css}" rel="stylesheet">
+    <script th:src="@{../dist/bootstrap.min.js}"></script>
+    <script th:src="@{../dist/summernote.js}"></script>
+
+<!--
+    <link rel="stylesheet" href="../../static/dist/bootstrap.css">
+    <link rel="stylesheet" href="../../static/dist/summernote.css">
+    <script src="../../static/js/jquery-3.4.1.js"></script>
+    <script src="../../static/dist/bootstrap.min.js"></script>
+    <script src="../../static/dist/summernote.js"></script>
+-->
+
+    <script th:inline="javascript">
+
+    </script>
+    <script>
+        $(function () {
+            $('.summerNote').summernote({
+                height: 500,
+                tabsize: 2,
+                lang: 'zh-CN'
+            });
+
+
+            $(".coverPhoto").click(function () {
+                $("#selectPhoto").trigger("click");
+            });
+            let eleFile = document.querySelector('#selectPhoto');
+            eleFile.addEventListener('change', function() {
+                let preview = document.querySelector('.coverPhoto');
+                let file = this.files[0];
+                // 确认选择的文件是图片，其预览
+                if(file.type.indexOf("image") === 0) {
+                    let reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function() {
+                        // 图片base64化，预览
+                        let newUrl = this.result;
+                        //可以异步发送图片的base64
+                        //console.log(newUrl);
+                        preview.style.backgroundImage = 'url(' + newUrl + ')';
+                        preview.style.backgroundSize = '160px';
+                    };
+                }
+            });
+
+            $("#ad-classification").change(function () {
+                $("#t-saveClassification").val($(this).val());
+                console.log($("#t-saveClassification").val());
+            });
+
+
+        });
+
+
+        function submitCheck() {
+            let code = $("#articleIdentification").val()+$(".summerNote").summernote('code');
+            // let inSave = $("#t-saveContent");
+            console.log(code.length);
+            if (code.length < 50){
+                alert("文章内容过少");
+                // console.log("no")
+                return false;
+            }else {
+                // inSave.val(a);
+                if ($("#t-saveClassification").val()===""){
+                    alert("请确定分类");
+                    return false;
+                }else {
+                    console.log("正文保存请求发送");
+                    $.ajax({
+                        type: "POST",           //因为是传输文件，所以必须是post
+                        url: 'saveContentAsHtml',
+                        data: code,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            console.log(data);
+                        }
+                    });
+
+                    return true;
+                }
+            }
+        }
+    </script>
+
+
+
+</head>
+<body>
+<div th:replace="public/managerNav::top"></div>
+
+
+
+<form action="addArticle" onsubmit="return submitCheck()" method="post" enctype="multipart/form-data">
+    <div class="aa-div-mAddTitle">
+        <label><span>请输入文章标题：</span><input type="text" name = "title" required maxlength="30"/></label><br/>
+    </div>
+
+    <div class="aa-div-mSummerNote">
+        <label><span>下方编写正文：</span></label><br/>
+        <div class="summerNote" id = "textEd">
+
+        </div>
+    </div>
+
+    <div class="aa-div-mDigest">
+        <div><span style="font-weight: bold">请输入文章简介：</span></div>
+        <textarea id = "digest"  name = "digest" required></textarea>
+    </div>
+
+
+    <div class="aa-div-mCoverPhoto">
+        <span>请添加封面图片</span><br>
+        <div class="c-coverPhoto">
+            <input id="selectPhoto" style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;" type="file" name="coverPhoto" required/>
+            <div class="coverPhoto">
+
+            </div>
+        </div>
+    </div>
+
+    <div class = "aa-div-mClassification">
+        <span style="font-weight: bold;">请选择文章分类</span><br>
+        <select id = "ad-classification">
+            <option value="">请选择</option><option value="1">豆瓣8.0+</option><option value="2">小说</option><option value="3">名著</option>
+            <option value="4">诗歌散文</option><option value="5">青春</option><option value="6">教辅经典</option><option value="7">漫画绘本</option>
+            <option value="8">历史</option><option value="9">心理</option><option value="10">推理</option><option value="11">科普</option>
+            <option value="12">社科</option><option value="13">外文原著</option><option value="14">生活</option><option value="15">文学</option>
+            <option value="16">艺术</option><option value="17">影视原著</option> <option value="18">传记</option><option value="19">技能提升</option>
+        </select>
+    </div>
+<!--    <input type="hidden" name = "content" id = "t-saveContent">-->
+    <input type="hidden" name = "cId" id = "t-saveClassification">
+    <input type="hidden" th:value="${articleIdentification}" id = "articleIdentification" name = "articleIdentification">
+
+    <div class="aa-div-mSubmit">
+        <input type="submit" value="添加文章">
+    </div>
+
+    <div style="height: 100px">
+
+    </div>
+
+</form>
+
+</body>
+</html>

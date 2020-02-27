@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/managerNav::managerNav_header(~{::title},~{},~{::style},~{::script})">
+    <meta charset="UTF-8"/>
+    <script src="../js/jquery-3.4.1.js"></script>
+    <title>mBooks</title>
+    <style>
+        .mb-di-operation{width: 340px;margin: 30px auto auto;}
+        .mb-di-operation button{width: 60px; height: 30px;border-radius: 1%; margin-left: 20px;}
+
+        .no-di-add{width: 80%;margin: 30px auto auto; display: none;}
+        .no-di-add form>div{margin-top: 16px;}
+        .no-di-add input{width: 180px; height: 30px; font-size: 16px;}
+        .no-di-add label{margin-left: 30px;}
+        .no-di-add textarea{width: 500px;height: 100px; font-size: 15px;}
+
+        .no-di-delete{width: 80%; margin: 30px auto auto; display: none;}
+        .no-di-delete input{height:30px; border-radius:4px;  border: 0 solid firebrick; border-bottom-width: 1px;outline:medium; font-size: 16px;}
+
+        .no-di-update{width: 80%;margin: 30px auto auto; display: none;}
+        .no-di-update form>div{margin-top: 16px;}
+        .no-di-update input{width: 180px; height: 30px; font-size: 16px;}
+        .no-di-update label{margin-left: 30px;}
+        .no-di-update textarea{width: 500px;height: 100px; font-size: 15px;}
+
+
+        .no-di-query{width: 80%;margin: 30px auto auto; display: none;}
+        .no-di-query form>div{margin-top: 16px;}
+        .no-di-query input{height:30px; border-radius:4px;  border: 0 solid firebrick; border-bottom-width: 1px;outline:medium; font-size: 16px;}
+        .no-di-query label{margin-left: 30px;}
+
+
+        .main{width: 87%; margin: 100px auto auto;}
+        .main0{width: 87%; margin: 100px auto auto; display: none;}
+
+        table{width:1000px;table-layout:fixed;}
+        table, tr, th, td{ border: 1px solid #ccc; padding: 0;margin: 0; border-collapse: collapse;}
+        th{background-color:#F5F5F5;}
+        th, td{width: 180px;height: 35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis}
+        .tb-ch{width: 60px;}
+        .tb-di-ch{width: 50px;height: 30px; margin: 5px auto auto;}
+        .input-ch{width: 50px;height: 28px;margin: auto;}
+
+
+        .di-digest-te{width: 50%;margin: 30px auto auto; text-align: center; display: none;}
+        .di-digest-te textarea{width: 100%; height: 300px; padding: 10px; font-size: 18px;}
+    </style>
+
+    <script th:inline="javascript">
+
+    $(function(){
+        let tt = $(".test").text();
+        if(tt!==""){
+            alert(tt);
+            $(".test").text("");
+        }
+        if ($(".check-queryShow").text()!==""){
+            $(".main0").css("display","block");
+        }
+
+
+        $("#addBooks").click(function () {
+            $(".no-di-delete").css("display","none");
+            $(".no-di-update").css("display","none");
+            $(".no-di-query").css("display","none");
+            let diA = $(".no-di-add");
+            if(diA.css("display") === "none"){
+                diA.css("display","block");
+            }else {
+                diA.css("display","none");
+            }
+        });
+
+        $("#deleteBook").click(function () {
+            $(".no-di-add").css("display","none");
+            $(".no-di-update").css("display","none");
+            $(".no-di-query").css("display","none");
+            let diD = $(".no-di-delete");
+            if(diD.css("display") === "none"){
+                diD.css("display","block");
+            }else {
+                diD.css("display","none");
+            }
+        });
+
+
+        $("#updateBook").click(function () {
+            $(".no-di-add").css("display","none");
+            $(".no-di-delete").css("display","none");
+            $(".no-di-query").css("display","none");
+            let diU = $(".no-di-update");
+            if(diU.css("display") === "none"){
+                diU.css("display","block");
+            }else {
+                diU.css("display","none");
+            }
+        });
+
+        $("#queryBooks").click(function () {
+            $(".no-di-add").css("display","none");
+            $(".no-di-delete").css("display","none");
+            $(".no-di-update").css("display","none");
+            let diU = $(".no-di-query");
+            if(diU.css("display") === "none"){
+                diU.css("display","block");
+            }else {
+                diU.css("display","none");
+            }
+        });
+
+
+        $("#add").click(function () {
+            let ta = "<tr>\n" +
+                "                <td class = \"tb-ch\" t-test = \"113\"><div class=\"tb-di-ch\"><input class = \"input-ch\" type=\"checkbox\"></div></td>\n" +
+                "                <td contenteditable=\"true\"></td>\n" +
+                "                <td contenteditable=\"true\"></td>\n" +
+                "                <td contenteditable=\"true\"></td>\n" +
+                "                <td contenteditable=\"true\"></td>\n" +
+                "                <td contenteditable=\"true\"></td>\n" +
+                "                <td ondblclick = \"bClickTest(this);\" ></td>\n" +
+                "                <td><input type='file'></td>\n" + "</tr>";
+            // $("table").find("tr").eq(a-1).after(ta);
+            $(".addLines").append(ta);
+
+        });
+        $("#delete").click(function () {
+            // let a = $("table").find("tr").length;
+            // $("table").find("tr").eq(a-1).remove();
+
+            let ar = [];
+            $(".input-ch").each(function () {
+                if ( $(this).is(':checked')){
+                    ar.push($(this).parent().parent().parent().index());
+                    // console.log("现处在："+$(this).parent().parent().parent().index())
+                }
+
+            });
+            console.log(ar+"==="+ar.length);
+            for (let i = ar.length; i > 0; i--){
+                $(".addLines").find("tr").eq(ar[i-1]).remove();
+                console.log("delete the " + ar[i-1]);
+            }
+
+        });
+
+        $("#digest-out").click(function () {
+            $(".main").css("display","block");
+            $(".di-digest-te").css("display","none");
+        });
+
+        $("#digest-in").click(function () {
+
+            let index = $(".di-digest-te").attr("value");
+            console.log("get " + index);
+            let digest = $(".text-area").val();
+            console.log(digest);
+            if (digest.length>0){
+                $(".addLines").find("tr").eq(index).find("td").eq(6).text(digest);
+                $(".text-area").val("");
+            }
+            $(".main").css("display","block");
+            $(".di-digest-te").css("display","none");
+
+        });
+
+        $("#insertAll").click(function () {
+            let allBooks = [];
+            let coverPhoto = [];
+            let formData = new FormData();
+            let a ="[";
+            $(".addLines").find("tr").each(function () {
+                /*allBooks.push({"name":$(this).find("td").eq(1).text(),
+                        "author":$(this).find("td").eq(2).text(),
+                        "classification":$(this).find("td").eq(3).text(),
+                        "publication":$(this).find("td").eq(4).text(),
+                        "publicationDate":$(this).find("td").eq(5).text(),
+                        "digest":$(this).find("td").eq(6).text(),
+                        });*/
+                a+="{"
+                a+="\"name\":\""+ $(this).find("td").eq(1).text()+
+                    "\",\"author\":\""+$(this).find("td").eq(2).text()+
+                    "\",\"cId\":\""+$(this).find("td").eq(3).text()+
+                    "\",\"publication\":\""+$(this).find("td").eq(4).text()+
+                    "\",\"publicationDate\":\""+$(this).find("td").eq(5).text()+
+                    "\",\"digest\":\""+$(this).find("td").eq(6).text();
+                a+="\"\},";
+                formData.append("coverPhotos",$(this).find("td").eq(7).find("input")[0].files[0]);
+            });
+            a+="]";
+            console.log("all books : " + a);
+            formData.append("books",a);
+            $.ajax({
+                type: "POST",           //因为是传输文件，所以必须是post
+                url: 'batchAdd',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    alert(data);
+                    let ctxPath = [[${#request.getContextPath()}]];
+                    window.location.href = ctxPath + "/manager/mBooks";
+
+                }
+            });
+
+
+        })
+
+
+     });
+
+
+    function check() {
+        let bId = $("#d-bId");
+        let name = $("#d-name");
+        let author = $("#d-author");
+        console.log(bId.val()+"--"+name.val()+"--"+author.val());
+        if(bId.val()===""){
+            if (name.val()===""||author.val()===""){
+                return false;
+            }
+        }
+        else{
+            name.val("");
+            author.val("");
+            return true;
+        }
+
+    }
+
+    function bClickTest(e) {
+        let bu = $(e);
+        console.log(bu.parent().index());
+        console.log(bu.text());
+        $(".main").css("display","none")
+        $(".text-area").val(bu.text());
+        $(".di-digest-te").css("display","block");
+        $(".di-digest-te").attr("value",bu.parent().index());
+
+    }
+
+    function queryCheck() {
+        if($("#q-cId").val()==="")
+            $("#q-cId").val("1");
+        if($("#q-bId").val()==="")
+            $("#q-bId").val("1");
+    }
+    </script>
+</head>
+<body>
+<span th:text="${result}" style="display: none" class="test"></span>
+<div th:replace="public/managerNav::top"></div>
+
+<div class="mb-di-operation">
+    <button id = "addBooks">添加</button>
+    <button id = "deleteBook">删除</button>
+    <button id = "updateBook">修改</button>
+    <button id = "queryBooks">查询</button>
+</div>
+<div class="no-di-add">
+    <form action = "addBook" enctype="multipart/form-data" method="POST">
+        <div>书名：<input name="name" type="text"/><label>作者：<input name="author" type="text"/></label><label>出版时间：<input name = "publicationDate" type="text"/></label><label>出版社：<input name = "publication" type="text"/></label></div>
+        <div>分类：<input name="cId" type="text"/>封面图片：<input name = "file" type="file" accept="image/*"></div>
+        <div>简介：<br><textarea name="digest" maxlength="200"></textarea><br><input type="submit" value="添加"/></div>
+    </form>
+</div>
+
+<div class="no-di-delete">
+   <form action="deleteBook" onsubmit="return check()">
+       请输入要删除的图书ID：<input type="text" name = "bId" id = "d-bId"/>
+       或者输入指定的书名及作者，书名：<input type="text" name = "name" id = "d-name"/> 作者：<input type="text" name="author" id = "d-author" /><input type="submit" value="进行删除">
+   </form>
+
+</div>
+
+<div class="no-di-update">
+    <form action = "updateBook" enctype="multipart/form-data" method="POST">
+        <div>bID：<input name="bId" type="text"><label>书名：<input name="name" type="text"></label>
+            <label>出版时间：<input name = "publicationDate" type="text"/></label>
+            <label>出版社：<input name = "publication" type="text"/></label>
+        </div>
+        <div>作者：<input name="author" type="text"><label>分类：<input name="cId" type="text"/></label><label>封面图片：<input name = "file" type="file" accept="image/*"></label></div>
+        <div>简介：<br><textarea name="digest" maxlength="200"></textarea><br><input type="submit" value="进行修改"/></div>
+    </form>
+</div>
+
+<div class="no-di-query">
+   <form action="queryBook" onsubmit="return queryCheck()">
+       <div>bID：<input name="bId" id = "q-bId"  type="text"><label>书名：<input name="name" type="text"></label><label>出版时间：<input name = "publicationDate" type="text"/></label><label>出版社：<input name = "publication" type="text"/></label></div>
+       <div>作者：<input name="author" type="text"><label>分类：<input name="cId" id = "q-cId" type="text"/></label></div>
+       <br><input type="submit" value="指定查询"/>
+   </form>
+
+</div>
+
+<!--显示查询数据，-->
+<span style="display: none" th:text="${ifShow}" class="check-queryShow"></span>
+<div class="main0">
+    <table class = "tab-test" id = "tb-show">
+
+        <tr>
+            <th class = "tb-ch">bId</th>
+            <th>书名</th>
+            <th>作者</th>
+            <th>分类</th>
+            <th>出版社</th>
+            <th>出版时间</th>
+        </tr>
+        <tr th:each="book:${books}">
+            <td th:text="${book.bId}"></td>
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.cId}"></td>
+            <td th:text="${book.publication}"></td>
+            <td th:text="${book.publicationDate}"></td>
+        </tr>
+
+    </table>
+</div>
+<!--        第二部分      -->
+
+<div class="main">
+    <h2 align="center">以下是批量添加</h2>
+    <button id = "add" type="button">添加一行</button>
+    <button id = "delete" type="button">删除选定行</button>
+    <button id = "insertAll">一键添加</button><span>编辑需要严格遵守格式，不换行，日期2000-00-00，摘要添加修改需要双击，不支持选定添加</span>
+    <table class = "tab-test" id = "tb-addSome">
+        <thead>
+        <tr>
+            <th class = "tb-ch"></th>
+            <th>书名</th>
+            <th>作者</th>
+            <th>分类</th>
+            <th>出版社</th>
+            <th>出版时间</th>
+            <th>摘要</th>
+            <th>封面图片</th>
+        </tr>
+        </thead>
+        <tbody class="addLines">
+
+        </tbody>
+    </table>
+
+    <!--        </form>-->
+</div>
+<div class="di-digest-te" value = "">
+    <textarea class="text-area" maxlength="200"></textarea>
+
+    <button id = "digest-in">确定</button>
+    <button id = "digest-out">取消</button>
+
+</div>
+
+<div style="width: 100%;height: 200px">
+
+</div>
+
+</body>
+</html>

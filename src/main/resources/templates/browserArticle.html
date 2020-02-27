@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/ordinaryNav::odinaryNav_header(~{::title},~{},~{::style},~{::script})">
+    <meta charset="UTF-8">
+    <title th:text="${article.getTitle()}">全文内容</title>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+
+    <style>
+        .br-mg-title{text-align: center;}
+        .br-mg-temporary{width: 300px; margin: auto; text-align: center;}
+        .br-temporary{
+            width: 300px;
+            height: 200px;
+            background-image: url("https://wrtcloud.cn/images/loading.gif");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .br-mg-showContent{width: 70%;margin: 45px auto auto;}
+
+        .di-m-addComment{width: 660px; margin: 60px auto auto;}
+        .addComment{height: 100px; width: 600px; font-size: 16px;}
+
+        .show-m-comments{width: 70%; margin: 20px auto auto;}
+        .cm-editorDate{margin-left: 30px;}
+        .cm-content{padding-left: 50px; margin-top: 10px;}
+
+    </style>
+
+
+    <script>
+        $(function () {
+            let requestData = "aId="+$(".ba-in-aId").val();
+            console.log("异步请求发送！！！");
+            $.ajax({
+                type: "GET",
+                url: "getContent",
+                data: requestData,
+                dataType:"html",
+                success: function (data) {
+                    // console.log(data.length);
+                    let content = $(".br-mg-showContent");
+                    content.html(data);
+                    // content.append(data);
+                    $(".br-mg-temporary").css("display","none");
+                    content.find("p").each(function () {
+                        if($(this).children("img").length>0){
+                            $(this).css("text-align","center");
+                        }
+                    });
+                }
+            });
+        })
+
+    </script>
+    <script th:inline="javascript">
+        $(function () {
+            let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+            $(".bt-addComment").click(function () {
+                if($(".top-di-userInfo span").text()!==""){
+                    if ($(".addComment").val()!==""){
+                        let aId = $(".ba-in-aId").val();
+                        let cmContent = $(".addComment").val();
+                        $.ajax({
+                            url:"user/addArticleComment",
+                            data:{"aId":aId,"cmContent":cmContent},
+                            success:function (data) {
+                                alert(data.result);
+                                if (data.mark === "true"){
+                                    window.location.href = ctxPath + "/browserArticle?aId="+$(".ba-in-aId").val();
+                                }
+                            }
+                        });
+                    }else alert("评论不可为空");
+                }else {
+                    let tempWindow=window.open('_blank');
+                    tempWindow.location = ctxPath + "/login";
+                }
+
+            });
+        })
+    </script>
+
+</head>
+<body>
+<div th:replace="public/ordinaryNav::nav"></div>
+
+<input type="hidden" class="ba-in-aId" th:value="${article.getaId()}">
+<div class="br-mg-title">
+   <h1 th:text="${article.getTitle()}">标题</h1>
+</div>
+<div class="br-mg-temporary">
+    <h2>正在加载，请稍后</h2>
+    <div class="br-temporary">
+
+
+    </div>
+</div>
+
+<div class="br-mg-showContent">
+
+</div>
+
+<div class="di-m-addComment">
+    <textarea class="addComment" maxlength="200"></textarea><button class="bt-addComment">添加新评论</button>
+</div>
+
+<div class="show-m-comments" th:each="comment : ${aComments}">
+    <div style="background-color: #F3F5F7;"><span class="cm-author" th:text="${comment.getAuthor()}"></span><span class="cm-editorDate" th:text="${comment.getCmEditorDate()}"></span></div>
+    <div class="cm-content" th:text="${comment.getCmContent()}">
+
+    </div>
+</div>
+
+<div style="height: 200px;">
+
+</div>
+</body>
+
+</html>

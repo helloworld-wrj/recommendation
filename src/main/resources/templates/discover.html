@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/ordinaryNav::odinaryNav_header(~{::title},~{},~{::style},~{::script})">
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+    <title>发现图书</title>
+    <style>
+        .dis-center{width: 85%; margin: auto;}
+        .dis-di-one{width: 100%; height: 260px; margin-top: 60px;}
+
+        .ddo-left{width: 60%; }
+        .ml-one{width: 100%; height: 220px; background-color: #FFFFFF; margin-top: 20px; padding: 20px;}
+        .r-title{margin-top: -20px;margin-left: 240px; font-size:20px; font-weight: bold;}
+        .r-title:hover{cursor: pointer;text-shadow:#000 1px 1px 1px;}
+        .a-coverPhoto{width: 220px; height: 123px; background-color: #666666; overflow: hidden; }
+        .a-coverPhoto:hover{cursor: pointer;}
+        .a-coverPhoto img{max-width: 220px;}
+        .di-one-digest{ height: 123px; margin-left: 240px; margin-top: -123px; }
+        .di-one-arInfo{height: 40px; text-align: center;}
+        .di-one-arInfo span{margin-left: 30px;}
+
+        .ddo-right{width: 40%;height: 260px; margin: -260px 0 0 63%; }
+        .ddo-right>div{width: 120px; height:240px; padding: 10px;  background-color: #DCDCDC; text-align: center;}
+        .ddo-right img{width: 120px; height: 170px;}
+        .ts-one{margin-left: 60px;}
+        .ts-two{margin-left: 260px; margin-top: -260px; }
+
+        .one-img,.two-img:hover{cursor: pointer;}
+
+        .test{width: 100%; height: 100px; font-weight: bold; font-size: 20px; text-align: center;}
+        .end{display: none;}
+
+
+    </style>
+    <script th:inline="javascript">
+        $(function () {
+            let temp = 3;
+            let y = true;
+
+            $(window).scroll( function() {
+                let dh = $(document).height();
+                let ds = ($(document).scrollTop());
+
+                /*console.log(" srollTop: " + $(document).scrollTop());
+                console.log("ducumenth: " + $(document).height());
+                console.log(dh - ds);
+                console.log("window : "+ $(window).height());*/
+                if(dh - ds < ($(window).height() + 100)) {
+                    // console.log("add");
+                    let ctxPath = [[${#request.getContextPath()}]];
+
+                    if (y){
+                        $(".test").text("正在加载中");
+                        $.ajax({
+                            url: ctxPath + "/dynamicLoading",
+                            async: false,
+                            data: {page: temp},
+                            success: function (data) {
+                                if(data.check==="false"){
+                                    $(".test").text("已经加载文章或者图书");
+                                    y = false;
+                                }else {
+                                    temp++;
+                                    let content = " <div class=\"dis-di-one\">\n" +
+                                        "        <div class=\"ddo-left\">\n" +
+                                        "            <div class=\"ml-one\">\n" +
+                                        "                <input type='hidden' value='" + data.article.aId + "'>"+
+                                        "                <span>"+data.article.cValue+"</span><div class=\"r-title\"><span>"+data.article.title+"</span></div>\n" +
+                                        "                <hr>\n" +
+                                        "                <div class=\"a-coverPhoto\">\n" + "<img src = \" "+data.article.coverPhotoUrl + " \">"+
+                                        "\n" +
+                                        "                </div>\n" +
+                                        "                <div class=\"di-one-digest\">\n" + data.article.digest+
+                                        "\n" +
+                                        "                </div>\n" +
+                                        "                <hr>\n" +
+                                        "                <div class=\"di-one-arInfo\"><spa>作者</spa><span>"+data.article.editorDate+"</span><span>评论</span></div>\n" +
+                                        "            </div>\n" +
+                                        "        </div>\n" +
+                                        "        <div class=\"ddo-right\">\n" +
+                                        "            <div class=\"ts-one\">\n" +
+                                        "                <input type='hidden' value='"+ data.books[0].bId +"'>"+
+                                        "                <div class=\"one-img\">\n" +
+                                        "                    <img src=\" "+ data.books[0].coverPhotoUrl +" \">\n" +
+                                        "                </div>\n" +
+                                        "                <span>" + data.books[0].name+ "</span>\n" +
+                                        "            </div>\n" +
+                                        "            <div class=\"ts-two\">\n" +
+                                        "                <input type='hidden' value='"+ data.books[1].bId +"'>"+
+                                        "                <div class=\"two-img\">\n" +
+                                        "                   <img src=\" "+ data.books[1].coverPhotoUrl +" \">\n" +
+                                        "                </div>\n" +
+                                        "                <span>" + data.books[1].name+ "</span>\n" +
+                                        "            </div>\n" +
+                                        "\n" +
+                                        "        </div>\n" +
+                                        "    </div>";
+                                    // $("#three").append("<h2> 345 </h2>");
+                                    // $(".test").text(" ");
+                                    $(".dis-center").append(content);
+                                }
+
+
+                            }
+                        });
+                    }
+
+
+                }
+            });
+
+
+            $(".dis-center").on('click','.r-title, .a-coverPhoto',function () {
+                // console.log($(this).parent().children(":first").val());
+                let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+                let tempWindow=window.open('_blank');
+                tempWindow.location = ctxPath + "/browserArticle?aId=" + $(this).parent().children(":first").val();
+            });
+
+            $(".dis-center").on('click','.one-img,.two-img',function () {
+                // console.log($(this).parent().children(":first").val());
+                let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+                let tempWindow=window.open('_blank');
+                tempWindow.location = ctxPath + "/browserBook?bId=" + $(this).parent().children(":first").val();
+            });
+
+
+
+        });
+
+    </script>
+</head>
+<body>
+<div th:replace="public/ordinaryNav::nav"> </div>
+
+<div class="dis-center">
+
+    <div class="dis-di-one" th:each="list:${firstList}">
+        <div class="ddo-left">
+            <div class="ml-one">
+                <input type="hidden" th:value="${list.article.getaId()}">
+                <span th:text="${list.article.getcValue()}"></span><div class="r-title" th:text="${list.article.getTitle()}"></div>
+                <hr>
+                <div class="a-coverPhoto">
+                    <img th:src="${list.article.getCoverPhotoUrl()}">
+                </div>
+                <div class="di-one-digest" th:text="${list.article.getDigest()}">
+
+                </div>
+                <hr>
+                <div class="di-one-arInfo"><span>作者</span><span th:text="${list.article.getEditorDate()}">时间</span><span>评论</span></div>
+            </div>
+
+        </div>
+        <div class="ddo-right">
+            <div class="ts-one">
+                <input type="hidden" th:value="${list.books[0].getbId()}">
+                <div class="one-img">
+<!--                    <img alt="加载中">-->
+                    <img th:src="${list.books[0].getCoverPhotoUrl()}">
+                </div>
+                <span th:text="${list.books[0].getName()}">some information</span>
+            </div>
+            <div class="ts-two">
+                <input type="hidden" th:value="${list.books[1].getbId()}">
+                <div class="two-img">
+                    <img th:src="${list.books[1].getCoverPhotoUrl()}">
+                </div>
+                <span th:text="${list.books[1].getName()}">some information</span>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+<div class="test"></div>
+<div class="end">这是有底线的哦</div>
+
+</body>
+</html>

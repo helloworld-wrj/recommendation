@@ -1,0 +1,27 @@
+<html>
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<table>
+    <tr>
+        <td width="250" align="left">
+            <select name="job" size="1" >
+                <option value="普通会员">普通会员</option>
+                <option value="副组长">副组长</option>
+                <option value="组长">组长</option>
+                <option value="主任">主任</option>
+                <option value="副部长">副部长</option>
+                <option value="部长">部长</option>
+                <option value="秘书长">秘书长</option>
+                <option value="副会长">副会长</option>
+                <option value="会长">会长</option>
+            </select>
+            <!-- 动态设置Select的默认值 -->
+            <script language= JavaScript>
+                var job= "秘书长";//根据后台传值来动态改变它
+                document.getElementsByName("job")[0].value=job;
+            </script>
+        </td>
+    </tr>
+</table>
+</html>

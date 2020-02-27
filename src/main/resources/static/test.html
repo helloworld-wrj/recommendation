@@ -1,0 +1,117 @@
+<!DOCTYPE html><!--DOCTYPE 后必须加html-->
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>加载</title>
+    <script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+    <style type="text/css">
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .one{
+            height: 1000px;
+            width: 100%;
+        }
+        .two{
+            height: 1000px;
+            width: 100%;
+        }
+        .three{
+            height: auto;
+            width: 100%;
+        }
+        .par{
+            width: 800px;
+            height: 280px;
+            background-color: aliceblue;
+            position: relative;
+            margin:auto
+        }
+        .left{
+            width: 300px;
+            height: 280px;
+            background-color: antiquewhite;
+            position: absolute;
+            left: 0;
+
+        }
+        .right{
+            width: 500px;
+            height: 280px;
+            background-color: aqua;
+            margin-left: 300px;
+
+        }
+        .interval{
+            width: 100%;
+            height: 30px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function(){
+
+            $("#button").click( function () {
+                $("#three").append("<h2>34565</h2>");
+                console.log("div three height: "+$("#three").height());
+                console.log(" srollTop: " + $(document).scrollTop());
+                console.log("ducumenth: " + $(document).height());
+                console.log("window : "+ $(window).height());
+            });
+
+            $(window).scroll( function() {
+                var dh = $(document).height();
+                var ds = ($(document).scrollTop());
+
+
+                console.log(" srollTop: " + $(document).scrollTop());
+                console.log("ducumenth: " + $(document).height());
+                console.log(dh - ds);
+                console.log("window : "+ $(window).height());
+                if(dh - ds < ($(window).height() + 100)){
+                    console.log("ssss")
+                    var content = "<div class = \"par\">"
+                        + "<div class = \"left\"></div>"
+                        + "<div class = \"right\"></div>"
+                        + "</div>"
+                        + "<div class = \"interval\"></div>";
+                    // $("#three").append("<h2> 345 </h2>");
+                    $("#three").append(content);
+
+                }
+
+            });
+
+        });
+
+
+
+    </script>
+</head>
+<body>
+<div id = "one" class = "one">
+
+
+</div>
+<div class = "two">
+
+
+</div>
+<div id = "three" class = "three">
+    <button id = "buttton">12345t</button>
+    <div id = "par" class = "par">
+        <div id = "left" class = "left">
+
+
+        </div>
+        <div id = "right" class = "right">
+
+
+        </div>
+    </div>
+    <div id = "interval" class = "interval"></div>
+</div>
+</body>
+
+
+</html>

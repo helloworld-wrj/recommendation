@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="or.wr.bookrecommendationsystem.mapper.UserMapper">
+    <insert id="addUser" parameterType="User">
+      insert into rt_users(username, email, password) values (#{username},#{email},#{password})
+   </insert>
+
+    <select id="findUsername" resultType="String" parameterType="String">
+        select username from rt_users where username = #{username};
+
+    </select>
+
+    <select id="findEmail" resultType="String" parameterType="String">
+        select email from rt_users where email = #{email};
+    </select>
+
+    <select id="checkPasswordByEmail" resultType="String" parameterType="String">
+        select password from rt_users where email = #{email};
+    </select>
+
+    <select id="checkPasswordByUsername" resultType="String" parameterType="String">
+        select password from rt_users where username = #{username};
+    </select>
+
+    <select id="findUsernameByEmail" parameterType="String" resultType="String">
+        select username from rt_users where email = #{email}
+    </select>
+
+    <update id="updatePasswordByUsername">
+        update rt_users set password = #{password} where username = #{username}
+    </update>
+
+    <update id="updateEmailByUsername">
+        update rt_users set email = #{email} where username = #{username}
+    </update>
+
+    <insert id="addBookToDesk">
+        insert into rt_userDesk values(#{user},#{bId})
+    </insert>
+
+    <select id="findBIdByUserFDesk" resultType="Integer">
+        select count(*) from rt_userDesk where user = #{user} and bId = #{bId}
+    </select>
+
+    <select id="findAllBIdByUserFDesk" resultType="Integer" parameterType="String">
+        select bId from rt_userDesk where user = #{user}
+    </select>
+
+    <delete id="deleteDBookByBIdFDesk">
+        delete from rt_userDesk where user = #{user} and bId = #{bId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head  th:fragment="odinaryNav_header(title,links,style,script)">
+    <meta charset="UTF-8">
+    <title th:replace="${title}">ordinaryNav</title>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <style  type="text/css" th:replace="${style}"></style>
+    <th:block th:replace="${links}" />
+    <th:block th:replace="${script}" />
+
+    <style>
+        html,body{margin: 0;padding: 0;}
+        .main-top{height: 45px; width: 100%; text-align: center; border-bottom: 1px solid firebrick;}
+        .top-nav{height: 45px; width: 762px;margin: auto; text-align: center;}
+        .top-nav li{list-style:none; float: left; width: 122px; line-height: 45px; font-size: 18px; }
+        /*.top-nav li:hover{cursor:pointer;background-color: firebrick; color: #FFFFFF;}*/
+        .top-nav li:hover{cursor:pointer; border-left: 1px solid firebrick; border-right: 1px solid firebrick; color: firebrick;}
+        hr{background-color: firebrick;border: none; height: 1px;}
+
+        .top-di-userInfo{width: 200px; height: 45px; position: absolute; top: 0; right: 100px; display: none;}
+        .top-di-userInfo span{line-height: 45px; text-align: center; color: firebrick;}
+        .top-di-userInfo span:hover{cursor: pointer; text-shadow: #000 1px 1px 1px;}
+        .top-di-userInfo:hover .fo-LogOut{display: block;}
+        .fo-LogOut{width:70px;position: absolute;margin-left: 65px;display: none; z-index: 2;}
+        .fo-LogOut input{width: 70px;}
+        .fo-LogOut input:hover{cursor: pointer;}
+
+
+    </style>
+    <script th:inline="javascript">
+        let ctxPath = [[${#request.getContextPath()}]];
+
+        let temp = ctxPath + "/user/getUsername";
+        $(function () {
+            $.ajax({
+                url:temp,
+                success:function (data) {
+                    if (data.result==="true"){
+                        $(".top-di-userInfo").css("display","block");
+                        $(".top-di-userInfo span").text(data.user);
+                        $(".fo-LogOut form").attr("action",ctxPath+"/user/LogOut")
+                    }
+                }
+            });
+
+            $("#nav li").click(function(){
+                let lv = $(this).attr("value");
+                let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+                window.location.href = ctxPath + "/" + lv;
+            });
+        });
+    </script>
+
+</head>
+<body>
+
+<div class = "main-top" th:fragment = "nav">
+    <div class = "top-nav">
+        <ui id = "nav">
+            <li value = "index">首页</li>
+            <li value = "discover">发现图书</li>
+            <li value = "classification">图书分类</li>
+            <li value = "search">搜索</li>
+            <li value = "user/myDesk">我的书桌</li>
+            <li value = "user/person">个人中心</li>
+        </ui>
+    </div>
+    <div class="top-di-userInfo">
+        <span></span>
+        <div class="fo-LogOut">
+            <form action="">
+                <input class="inSub-logOut" type="submit" value="退出登录">
+            </form>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+html,body{margin: 0;padding: 0;}
+a{text-decoration:none;}
+
+.di-main1{height: 460px; margin-top: 10px;}
+.di-main1>div{width: 100%; height: 450px; min-width: 1000px;background-color: #F6F6F6F6; position: absolute; }
+
+
+.di-center{width: 80%; height: 100%; margin: auto;}
+.di-left{width: 70%; height: 450px; display: flex; justify-content: center; align-items: center; background-color: #DCDCDC;}
+.di-left:hover{cursor: pointer;}
+.di-left img{max-height: 450px; max-width: 70%;}
+.di-left img:hover{cursor: pointer; }
+
+.di-right{width: 26%; height: 390px; margin: -450px 0 0 70%; padding: 30px 2% 30px 2%; background-color: #FFFFFF; }
+.h-time{}
+.h-title{font-weight: bold;font-size: 20px;}
+.h-title:hover{cursor: pointer;text-shadow:#000 1px 1px 1px;}
+.h-digest{color: #668B8B;}
+.h-digest:hover{cursor: pointer;text-shadow:#000 1px 1px 1px;}
+
+.di-main2{width: 100%; height: 1200px; background-color: #F6F6F6; }
+.main2{width:85%; height: 100%; margin: auto; background-color: #F6F6F6;}
+.main2-left{width: 68%; height: 1180px; padding: 10px 1% 10px 1%; }
+.ml-one{width: 90%; height: 220px; background-color: #FFFFFF; margin-top: 20px; padding: 20px;}
+.ml-one img{width: 220px;}
+.r-title{margin-top: -20px;margin-left: 240px; font-size:20px; font-weight: bold;display:inline-block;}
+.r-title:hover{cursor: pointer;text-shadow:#000 1px 1px 1px;}
+.a-coverPhoto{width: 220px; height: 123px; background-color: #666666;  overflow: hidden;}
+.a-coverPhoto img:hover{cursor: pointer;}
+.di-one-digest{ height: 123px; margin-left: 240px; margin-top: -123px; }
+.di-one-arInfo{height: 40px; text-align: center;}
+.di-one-arInfo span{margin-left: 30px;}
+
+.main2-right{width: 28%; height:1180px; margin: -1200px 0 0 70%; padding: 10px 1% 10px 1%;}
+.mr-one{width: 94%; height: 400px;padding: 20px 3% 20px 3%; background-color: #FFFFFF; margin-top: 20px;}
+
+.latest-book-coverPhoto{width: 250px; height: 300px; margin: auto; overflow: hidden;}
+.latest-book-coverPhoto img{max-width: 250px;}
+.latest-book-coverPhoto:hover{cursor: pointer;}
+.latest-book-name{margin-top: 10px; text-align: center;}

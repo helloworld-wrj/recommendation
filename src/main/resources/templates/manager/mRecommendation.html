@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/managerNav::managerNav_header(~{::title},~{},~{::style},~{::script})">
+    <meta charset="UTF-8"/>
+    <title>推荐管理</title>
+    <style>
+        .mr-mdi-re{width: 80%;margin:45px auto auto;}
+        .mr-mdi-re div{margin-top: 50px;}
+        .mr-mdi-re input[type=submit]:hover{cursor: pointer; }
+        .mr-mdi-re input[type=text]{
+            height:30px;
+            margin:0 30px 0 30px;
+            border-radius:4px;
+            border: 0 solid firebrick;
+            border-bottom-width: 1px;
+            outline:medium;
+            font-size: 16px;
+            text-align: center;
+        }
+        .re-headline input[type=text]{ width: 100px;}
+        #classicSaying{width: 800px;text-align: left; }
+    </style>
+    <script src="../../static/js/jquery-3.4.1.js"></script>
+    <script>
+        $(function () {
+            let operatingResult = $(".operatingResult");
+            if (operatingResult.val()!==""){
+                alert(operatingResult.val());
+                operatingResult.val("");
+            }
+
+        });
+        function checkAId(e) {
+            let aId = "aId="+e.val();
+            let da;
+            $.ajax({
+                "type": "GET",
+                "url": 'checkAId',
+                "async":false,
+                "data": aId,
+                "success": function (data) {
+                    da=data;
+                }
+            });
+            if (da !== "true") {
+                alert("aId 为 " + e.val() + " 的文章不存在");
+                e.val("");
+                return false;
+            } else {
+                // console.log(+e.val() + "exist")
+                return true;
+            }
+
+        }
+        function checkHeadlineAId() {
+            let first = $("#firstArticle");
+            let second = $("#secondArticle");
+            if (second.val() !== first.val()) {
+                if (checkAId(first) && checkAId(second))
+                    return true
+            } else {
+                alert("aId不可以同时相同");
+                second.val("");
+                return false;
+            }
+            return false;
+        }
+
+    </script>
+</head>
+<body>
+<div th:replace="public/managerNav::top"></div>
+
+<input class="operatingResult" th:value="${operatingResult}" type="hidden">
+
+<div class="mr-mdi-re">
+    <div class="re-headline">
+        <form onsubmit="return checkHeadlineAId()" action="setHeadlines">
+            输入头条的两篇文章的aId:
+            <input type="text" name = "firstArticle" id="firstArticle" maxlength="6" required >and
+            <input type="text" name="secondArticle" id="secondArticle" maxlength="6" required >
+            <input type="submit">
+        </form>
+    </div>
+
+    <div class="re-classicSayings">
+        <form action="setClassicSaying">
+            请输入语录（推荐为最新添加的语录）：
+            <input type="text" name = "content" id = "classicSaying" maxlength="100" required><br>
+            请输入出处：<input type="text" name = "provenance" maxlength="20"><input type="submit" value="添加" required>
+        </form>
+    </div>
+
+    <div>
+        输入推荐的三篇文章的aId：<br><br>
+        <form action="setCReArticle">
+            第一篇：<label><input type="text" name="aId"><input name="reIndex" value="3" type="hidden"><input type="submit" value="设置"></label>
+        </form><br>
+        <form action="setCReArticle">
+            第二篇：<label><input type="text" name="aId"><input name="reIndex" value="4" type="hidden"><input type="submit" value="设置"></label>
+        </form><br>
+        <form action="setCReArticle">
+            第三篇：<label><input type="text" name="aId"><input name="reIndex" value="5" type="hidden"><input type="submit" value="设置"></label>
+        </form>
+    </div>
+
+</div>
+
+
+</body>
+</html>

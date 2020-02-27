@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/managerNav::managerNav_header(~{::title},~{},~{::style},~{::script})">
+    <meta charset="UTF-8"/>
+    <script src="../static/js/jquery-3.4.1.js"></script>
+    <title>mArticles</title>
+
+
+    <style>
+        .op-di-select{margin:45px auto auto; text-align: center; font-size: 16px; width: 540px;}
+        .op-di-select input{height:30px; border-radius:4px;  border: 0 solid firebrick; border-bottom-width: 1px;outline:medium;font-size: 16px;}
+        .op-di-select button{width: 80px; height: 30px;border-radius: 1%;}
+        .op-di-select button:hover{cursor: pointer;}
+        .aId{text-align: center;}
+        .selectKeyWord{width:240px;text-align: right;}
+        .op-di-mSelectByAId{width: 200px;}
+        .op-di-mSelectByKey{width: 340px; margin: -34px 0 0 200px;}
+
+        .di-showTable{width:1320px; margin:40px auto auto; text-align: center;}
+        table{width:1320px;table-layout:fixed;}
+        table, tr, th, td{height: 40px; border: 1px solid #ccc; padding: 0;margin: 0; border-collapse: collapse;}
+        th,td{width: 180px;height: 35px;;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+        th{background-color:#F5F5F5;}
+        tbody{font-size: 15px;}
+
+        .t-chBs{width: 50px;}
+        .aId{width: 60px;}
+        input[type=checkbox]{width: 30px;height: 30px;}
+        .t-title{width: 300px;}
+        .t-classification{width: 150px;}
+        .t-digest{width: 600px;}
+        .t-operation{width: 160px;}
+    </style>
+
+
+    <script th:inline="javascript">
+        let ctxPath=[[${#httpServletRequest.getContextPath()}]];
+        $(function () {
+            $(".deleteArticle").click(function () {
+                let bt_de = $(this);
+                let aid = "aId="+bt_de.parent().parent().children(".aId").text();
+                console.log(aid);
+                let r = confirm("是否确定删除，删除不可恢复");
+                if (r === true){
+                    $.ajax({
+                        method:"post",
+                        url:"deleteArticle",
+                        data:aid,
+                        success:function (data) {
+                            bt_de.parent().parent().remove();
+                            alert(data);
+                        }
+                    });
+                }
+            });
+
+            $(".toUpdateArticle").click(function () {
+                let bt_up = $(this);
+                let aid = "aId="+bt_up.parent().parent().children(".aId").text();
+                window.location.href = ctxPath + "/manager/toUpdateArticle?"+aid;
+            });
+
+        })
+    </script>
+</head>
+<body>
+<div th:replace="public/managerNav::top"></div>
+
+<div class="op-di-select">
+    <div class="op-di-mSelectByAId">
+        <form action="selectArticleByAId" method="post">
+            <label>
+                <input type="text" name = "aId" maxlength="6" class="aId" required/>
+            </label>
+            <button>aId查询</button>
+        </form>
+    </div>
+    <div class="op-di-mSelectByKey">
+        <form action="selectArticleByKey">
+            <label>
+                <input class="selectKeyWord" maxlength="20" name = "key" type="text" required/>
+            </label>
+            <button>简单查询</button>
+        </form>
+    </div>
+</div>
+<hr>
+<div class="di-showTable">
+    <button>一键删除</button>
+    <table>
+        <thead>
+            <tr>
+                <th class="t-chBs"><input type="checkbox" class="chBs"></th>
+                <th class="aId">aId</th>
+                <th class="t-title">标题</th>
+                <th class="t-classification">分类</th>
+                <th class="t-digest">摘要</th>
+                <th colspan="2" class="t-operation">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="article:${articles}">
+                <td><input type="checkbox" class="chb"></td>
+                <td class="aId" th:text="${article.aId}"></td>
+                <td th:text="${article.title}"></td>
+                <td th:text="${article.cValue}"></td>
+                <td th:text="${article.digest}"></td>
+                <td><button class = "deleteArticle">删除</button></td>
+                <td><button class = "toUpdateArticle">修改</button></td>
+            </tr>
+            <tr>
+                <td colspan = "7" th:if="${noDate}">"没有找到任何符合的数据"</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

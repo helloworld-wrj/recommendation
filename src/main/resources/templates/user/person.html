@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/ordinaryNav::odinaryNav_header(~{::title},~{},~{::style},~{::script})">
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+
+    <style>
+        .per-m-center{width: 70%;margin: 60px auto auto; font-size: 18px;}
+        button{font-size: 16px;}
+        button:hover{cursor: pointer;}
+        .up-o-pw{margin: 50px auto auto; display: none;}
+        .per-m-center input[type=text],input[type=password], input[type=email]{
+            height:30px;
+            border-radius:4px;
+            border: 0 solid firebrick;
+            border-bottom-width: 1px;
+            outline:medium;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .up-email{margin: 60px auto auto;}
+        .up-m-em,.up-o-em{display: none;}
+
+        .per-m-cm{margin-top: 20px; text-align: center;}
+        .m-bComments, .m-aComments{ display: none;}
+        .one-aComment, .one-bComment{margin-top: 15px;}
+
+    </style>
+    <script src="../../static/js/jquery-3.4.1.js"></script>
+    <script th:inline="javascript">
+        let cCode;
+        $(function () {
+            let re = $(".io-up-result");
+            if (re.val()!== ""){
+                alert(re.val());
+                re.val("");
+
+            }
+            $(".mpw-o-dis").click(function () {
+                let op = $(".up-o-pw");
+                if (op.css("display")==="none"){
+                    op.css("display","block");
+                }else {
+                    op.css("display","none");
+                }
+            });
+
+            $(".bt-getCode").click(function () {
+                let em = $(".o-wp-em");
+                if (em.val() !== ""){
+                    let getCode = $(".bt-getCode");
+                    getCode.attr('disabled',true);
+                    let i = 10;
+                    const interval = setInterval(function(){
+                        if(i<=0){
+                            getCode.html("获取验证码");
+                            getCode.attr('disabled',false);
+                            clearInterval(interval);
+                        }else{
+                            getCode.html(i + " s 再次获取");
+                            i--;
+                        }
+                    }, 1000);
+                    let email = "email="+em.val();
+                    $.ajax({
+                        url:"up/getCode",
+                        data:email,
+                        type:"post",
+                        success:function (data) {
+                            alert(data.info);
+                            if (data.result==="true"){
+                                cCode = data.code;
+                                console.log("the code is " + cCode);
+                            }
+                        }
+
+                    });
+                }else {
+                    alert("请输入邮箱");
+                }
+
+            });
+
+            $(".bt-openUpEm").click(function () {
+                let op = $(".up-m-em");
+                if (op.css("display")==="none"){
+                    op.css("display","block");
+                }else {
+                    op.css("display","none");
+                }
+            });
+
+            $(".bt-checkPwd").click(function () {
+                let pw = $(".check-password");
+                if (pw.val()!==""){
+                    let chPwd = "password=" + pw.val();
+                    $.ajax({
+                        url:"up/password",
+                        type: "post",
+                        data: chPwd,
+                        success:function (data) {
+                            if (data.result === "true"){
+                                $(".up-o-em").css("display","block");
+                                $(".up-m-em").css("display","none");
+                            }else {
+                                alert("密码错误");
+                            }
+                        }
+                    })
+                }else {
+                    alert("请输入密码");
+                }
+            });
+
+        });
+
+        function checkCode() {
+            if($(".in-code").val()===cCode){
+                if($(".in-a-pw").val()===$(".in-pw").val()){
+                    return true;
+                }
+                else {
+                    alert("两次密码不一致");
+                    return false;
+                }
+            }
+            else {
+                alert("验证码有误");
+                return false;
+            }
+        }
+    </script>
+    <script>
+        $(function () {
+            let m_aComment = $(".m-aComments");
+            let m_bComment = $(".m-bComments");
+
+            $(".bt-m-bc").click(function () {
+               m_aComment.css("display","none");
+               if(m_bComment.css("display")==="none"){
+                   m_bComment.css("display","block");
+               }else {
+                   m_bComment.css("display","none");
+               }
+
+            });
+            $(".bt-m-ac").click(function () {
+                m_bComment.css("display","none");
+                if(m_aComment.css("display")==="none"){
+                    m_aComment.css("display","block");
+                }else {
+                    m_aComment.css("display","none");
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<div th:replace="public/ordinaryNav::nav"></div>
+
+<input class="io-up-result" type="hidden" th:value="${up_result}">
+<div class="per-m-center">
+    <div class="up-m-pw">
+        <button class="mpw-o-dis">修改密码</button>
+        <div class="up-o-pw">
+            <div class="up-o-getCode">输入账号邮箱<input type="email" class="o-wp-em" maxlength="30"><button class="bt-getCode">获取验证码</button></div>
+            <form action="up/pwd" method="post" onsubmit="return checkCode()">
+                输入邮箱验证码：<input type="text" class="in-code" maxlength="4" autocomplete="new-password" required>
+                请输入新密码：<input type="password" class="in-pw" name = "password" maxlength="16" autocomplete="new-password" required>
+                确认新密码：<input type="password" class="in-a-pw" autocomplete="new-password" required>
+                <input type="submit" value="提交修改">
+            </form>
+        </div>
+    </div>
+    <div class="up-email">
+        <button class="bt-openUpEm">修改邮箱</button>
+        <div class="up-m-em">
+            请输入密码：<input class="check-password" type="password" autocomplete="new-password"> <button class="bt-checkPwd">提交请求</button>
+        </div>
+        <div class="up-o-em">
+            <form action="up/email" method="post">
+                请输入新邮箱：<input class="new-email" type="email" name = "email" autocomplete="new-password" required>
+                <input type="submit" value="修改">
+            </form>
+        </div>
+    </div>
+
+    <div class="per-m-cm">
+        <button class="bt-m-bc">管理图书评论</button>
+        <button class="bt-m-ac">管理文章评论</button>
+    </div>
+    <div class="m-bComments">
+        <div class="one-bComment" th:each="comment:${bComments}">
+            <span th:text="${comment.getCmContent()}">图书content</span>
+            <form action="deleteBComment">
+                <input type="hidden" class="" th:value="${comment.getCmId()}" name="cm_id">
+                <input type="submit" value="删除图书评论">
+            </form>
+        </div>
+    </div>
+
+    <div class="m-aComments">
+        <div class="one-aComment" th:each="comment:${aComments}">
+            <span th:text="${comment.getCmContent()}">文章content</span>
+            <form action="deleteAComment">
+                <input type="hidden" class="" th:value="${comment.getCmId()}" name="cm_id">
+                <input type="submit" value="删除文章评论">
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+</body>
+</html>

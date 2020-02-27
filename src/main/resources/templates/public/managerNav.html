@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head  th:fragment="managerNav_header(title,links,style,script)">
+    <meta charset="UTF-8">
+    <title th:replace="${title}">mangerNav</title>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+    <style  type="text/css" th:replace="${style}"></style>
+    <th:block th:replace="${links}" />
+    <th:block th:replace="${script}"/>
+
+    <style>
+        html,body{margin: 0; padding:0;}
+        hr{background-color: firebrick;border: none; height: 1px;}
+        .mi-top-nav{width: 100%;min-width: 1000px; height: 45px; border-bottom: 1px solid firebrick; }
+        .top-nav{width: 608px; height: 45px; margin: auto;}
+        .top-nav li{
+            list-style:none;
+            float: left;
+            width: 150px;
+            line-height: 45px;
+            border-right: 1px solid transparent;
+            border-right: 1px solid transparent;
+            font-size: 18px;
+            text-align: center;}
+        .top-nav li:hover{
+            border-right: 1px solid firebrick;
+            border-left: 1px solid firebrick;
+            cursor: pointer;
+            color: firebrick;
+            text-shadow:#000 1px 1px 1px;
+        }
+
+
+        .mArticles:hover .ma-di-managerArticle{display: block;}
+        .ma-di-managerArticle{
+            width: 150px;
+            height: 135px;
+            display: none;
+            text-shadow:none;
+            background-color: white;
+            position: absolute;
+            border-right: 1px solid firebrick;
+            border-left: 1px solid firebrick;}
+        .ma-di-managerArticle div:hover{color: firebrick; text-shadow:#000 1px 1px 1px;}
+
+
+        .top-di-userInfo{width: 200px; height: 45px; position: absolute; top: 0; right: 100px;}
+        .top-di-userInfo span{line-height: 45px; text-align: center; color: firebrick;}
+        .top-di-userInfo span:hover{cursor: pointer; text-shadow: #000 1px 1px 1px;}
+    </style>
+    <script>
+        $(function () {
+
+            $("#index").click(function () {
+                window.location.href = $(this).attr("value");
+            });
+            $("#mBooks").click(function () {
+                window.location.href = $(this).attr("value");
+            });
+            $(".ma-di-managerArticle div").click(function () {
+                window.location.href = $(this).attr("value");
+            });
+            $("#mRecommendation").click(function () {
+                window.location.href = $(this).attr("value");
+            });
+        })
+    </script>
+</head>
+<body>
+<div class="mi-top-nav" th:fragment="top">
+    <div class="top-nav">
+        <ui id = "nav">
+            <li value = "index" id = "index">首页</li>
+            <li value = "mBooks" id = "mBooks">管理图书</li>
+            <li value = "mArticles" class="mArticles">
+                管理文章
+                <div class="ma-di-managerArticle">
+                    <div class="ma-bt-addArticle" value="toAddArticle">添加文章</div>
+                    <div class="ma-bt-updateArticle" value=toSeDeUpArticle>更新文章</div>
+                </div>
+            </li>
+            <li value = "mRecommendation" id = "mRecommendation">推荐管理</li>
+        </ui>
+    </div>
+    <div class="top-di-userInfo">
+        <span>当前用户名</span><br>
+
+    </div>
+
+</div>
+</body>
+</html>

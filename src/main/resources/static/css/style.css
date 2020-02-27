@@ -1,0 +1,528 @@
+
+html,
+body,
+div,
+span,
+applet,
+object,
+h1,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+dl,
+dt,
+dd,
+ol,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-family: 'Poiret One', cursive;
+    vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+ol,
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+
+.clearfix {
+    clear: both;
+}
+
+/*--start editing from here--*/
+
+a {
+    text-decoration: none;
+}
+
+.txt-rt {
+    text-align: right;
+}
+
+/* text align right */
+
+.txt-lt {
+    text-align: left;
+}
+
+/* text align left */
+
+.txt-center {
+    text-align: center;
+}
+
+/* text align center */
+
+.float-rt {
+    float: right;
+}
+
+/* float right */
+
+.float-lt {
+    float: left;
+}
+
+/* float left */
+
+.pos-relative {
+    position: relative;
+}
+
+/* Position Relative */
+
+.pos-absolute {
+    position: absolute;
+}
+
+/* Position Absolute */
+
+.vertical-base {
+    vertical-align: baseline;
+}
+
+/* vertical align baseline */
+
+.vertical-top {
+    vertical-align: top;
+}
+
+/* vertical align top */
+
+nav.vertical ul li {
+    display: block;
+}
+
+/* vertical menu */
+
+nav.horizontal ul li {
+    display: inline-block;
+}
+
+/* horizontal menu */
+
+img {
+    max-width: 100%;
+}
+
+/*--end reset--*/
+
+body {
+    font-family: 'Poiret One', cursive;
+    font-size: 100%;
+    /* background: url(../images/a.jpg)no-repeat center; */
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    -ms-background-size: cover;
+    text-align: center;
+}
+.w3ls-login {
+    display: -webkit-flex;
+    display: -webkit-box;
+    display: -moz-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+	
+}
+
+
+h1 {
+    font-size: 3.2em;
+    font-weight: 300;
+    text-transform: capitalize;
+    color: firebrick;
+    text-shadow: 1px 1px 1px #000;
+    letter-spacing: 3px;
+    padding: 1.3em 1vw;
+    text-align: center;
+}
+
+.w3ls-login form {
+    position: relative;
+    max-width: 500px;
+    margin: 0 5vw;
+    padding: 3.5vw;
+    border: none;
+    box-sizing: border-box;
+    display: flex;
+    border-left: 4px solid firebrick;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+    -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.3);
+	background-color: rgba(255, 255, 255, 0.4);
+}
+
+.w3ls-login label {
+    font-size: 16px;
+    color: firebrick;
+    float: left;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+}
+
+.agile-field-txt {
+    flex-basis: 100%;
+    -webkit-flex-basis: 100%;
+    margin-bottom: 1.5em;
+    clear: both;
+}
+
+.w3ls-login label i {
+    font-size: 1.1em;
+    margin-right: 3px;
+    color: #363af4;
+}
+
+.w3ls-login input[type="text"],.w3ls-login input[type="email"],
+.w3ls-login input[type="password"] {
+    width: 100%;
+    color: #000000;
+    outline: none;
+     font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    /* line-height: 25px; */
+    padding: 15px;
+    box-sizing: border-box;
+    border: none;
+     border: 1px solid #aaa;
+    -webkit-appearance: none;
+    font-family: 'Poiret One', cursive;
+    background: transparent;
+}
+
+.check1 {
+    text-align: left;
+}
+
+label.check {
+    float: none;
+    color: #aaa;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.agile_label {
+    float: left;
+    margin: 20px 0 0;
+}
+
+.agile-right {
+    float: right;
+    margin: 20px 0 0;
+}
+
+.agile-right a {
+    font-size: 15px;
+    color: #aaa;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+}
+
+.w3ls-login.w3l-sub {
+    margin-top: 1em;
+    flex-basis: 100%;
+    -webkit-flex-basis: 100%;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #aaa;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #aaa;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #aaa;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #aaa;
+}
+.w3ls-login input[type=submit] {
+    color: #fff;
+    font-weight: 600;
+    width: 50%;
+	margin: auto;
+    padding: 0.7em 0;
+    margin-top: 1em;
+    font-size: .9em;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: firebrick;
+    color: #fff;
+    border: 1px solid transparent;
+    font-family: 'Poiret One', cursive;
+    transition: 0.5s all ease;
+    -webkit-transition: 0.5s all ease;
+    -moz-transition: 0.5s all ease;
+    -o-transition: 0.5s all ease;
+    -ms-transition: 0.5s all ease;
+}
+
+.w3ls-login input[type=submit]:hover {
+    border: 1px solid firebrick;
+    color: firebrick;
+	background: transparent;
+}
+
+.w3ls-bot {
+    margin-top: 0;
+    width: 100%;
+}
+
+
+
+/* switch */
+
+label.switch {
+    position: relative;
+    display: inline-block;
+    height: 23px;
+    padding-left: 3.8em;
+    cursor: pointer;
+    color: #aaa;
+}
+
+li:nth-child(2) a,
+label.switch {
+    text-transform: capitalize;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.switch input {
+    display: none;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 4px;
+    width: 18%;
+    background-color: #666;
+    -webkit-transition: .4s;
+    transition: .4s;
+     border-radius: 10px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    left: 4px;
+    bottom: 5px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked+.slider {
+    background-color: firebrick;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px firebrick;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(18px);
+    -ms-transform: translateX(18px);
+    transform: translateX(18px);
+}
+
+/* Rounded sliders */
+
+.slider.round:before {
+    border-radius: 10px;
+}
+
+/* //switch */
+
+.form-end {
+    float: right;
+    width: 35%;
+}
+
+
+/*--responsive--*/
+
+@media(max-width:1920px) {
+    h1 {
+        font-size: 3.5vw;
+    }
+}
+
+@media(max-width:1024px) {
+    h1 {
+        font-size: 4.5vw;
+    }
+}
+
+@media(max-width:800px) {
+    h1 {
+        font-size: 5vw;
+    }
+}
+
+@media(max-width:480px) {
+    h1 {
+        font-size: 2.5em;
+    }
+    .w3ls-login form {
+        padding: 7.5vw;
+    }
+}
+
+@media(max-width:414px) {
+	.agile-right a,label.check {
+		letter-spacing: 1px;
+	}
+}
+
+@media(max-width:440px) {
+    h1 {
+        font-size: 2.3em;
+    }
+    .parent {
+        display: block;
+    }
+}
+
+@media(max-width:384px) {
+    .agile_label,.agile-right {
+        float: none;
+    }
+	.copy-wthree p {
+		letter-spacing: 1px;
+	}
+}
+
+@media(max-width:320px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    .w3ls-login form {
+        padding: 25px 8px;
+    }
+}
+
+.bt-getCode{
+	height: 30px;
+	background: firebrick;
+	font-family: 'Poiret One',cursive;
+	border: 0;
+	color: white;
+	font-size: 20px;
+
+}
+.u-msg{color: darkred;position: relative;left: 101%; top: -32%;display: none;text-align: left; font-weight: bold;}
+.bt-getCode:hover{color: firebrick;cursor: pointer;border: 1px solid firebrick;background: transparent;}
+
+.mark{width: 20px;height: 20px;position: relative;left: 101%;top:-36px;}
+
+.dMsg{width:100%; top: -50%; position: relative; font-size: 24px; color: red;font-weight: bold;}
+
+.goRegister a{color: #aaa; font-weight: bold; position: relative; left: 5%; letter-spacing: 3px; }

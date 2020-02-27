@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="or.wr.bookrecommendationsystem.mapper.ArticleMapper">
+
+    <insert id="addArticle" parameterType="Article">
+        insert into rt_articles(title, cId, contentPath, coverPhotoPath, coverPhotoUrl, digest, editorDate,identification)
+            values(#{title},#{cId},#{contentPath},#{coverPhotoPath},#{coverPhotoUrl},#{digest},now(),#{identification})
+    </insert>
+
+    <select id="findTitleAndContentPathByAID" parameterType="Integer" resultType="Article">
+        select title, contentPath from rt_articles where aId =  ${aId}
+    </select>
+
+    <select id="findTitleByAId" parameterType="Integer" resultType="Article">
+        select aId, title from rt_articles where aId = #{aId}
+    </select>
+
+    <select id="findContentPathByAId" parameterType="Integer" resultType="String">
+        select contentPath from rt_articles where aId = #{aId}
+    </select>
+
+    <select id="findATCDByAId" parameterType="Integer" resultType="Article">
+        select a.aId,a.title, c.value cValue,a.digest from rt_articles a, rt_classification c where a.aId=#{aId} and c.cId=a.cId
+    </select>
+
+    <select id="findATCDByKey" parameterType="String" resultType="Article">
+         select aId,title,digest,c.value cValue, coverPhotoUrl from rt_articles a join rt_classification c on a.cId = c.cId
+            and(c.value like CONCAT('%',#{key},'%') or title like CONCAT('%',#{key},'%') or digest like CONCAT('%',#{key},'%'))
+    </select>
+
+    <select id="findCoverPhotoPath" resultType="String" parameterType="Integer">
+        select coverPhotoPath from rt_articles where aId = #{aId}
+    </select>
+
+    <select id="findCoverPhotoUrl" resultType="String" parameterType="Integer">
+        select coverPhotoUrl from rt_articles where aId = #{aId}
+    </select>
+
+    <select id="checkAId" parameterType="Integer" resultType="Integer">
+        select count(*) from rt_articles where aId = #{aId}
+    </select>
+
+    <delete id="deleteArticleByAId">
+        delete from rt_articles where aId = #{aId}
+    </delete>
+
+    <select id="selectToUpdate" resultType="Article" parameterType="Integer">
+        select a.*, c.value cValue from rt_articles a, rt_classification c where aId = #{aId} and a.cId = c.cId;
+    </select>
+
+    <update id="updateArticle" parameterType="Article">
+        update rt_articles set title = #{title}, cId = #{cId}, coverPhotoPath = #{coverPhotoPath},coverPhotoUrl = #{coverPhotoUrl},
+         digest = #{digest} where aId = #{aId}
+    </update>
+
+    <insert id="setReArticle" parameterType="Integer">
+        insert into rt_reArticles values(#{id}, #{aId}, #{reIndex})
+        on duplicate key update
+            id = values(id),
+            aId = values(aId),
+            reIndex  = values(reIndex )
+    </insert>
+
+    <select id="findAIdFromReArticle" parameterType="Integer" resultType="Integer">
+        select aId from rt_reArticles where reIndex = #{reIndex}
+    </select>
+
+    <select id="findArticleDynamic" parameterType="Integer" resultType="Article">
+        select  a.*, c.value cValue from rt_articles a, rt_classification c where a.cId = c.cId order by aId desc limit #{page},1
+    </select>
+
+    <select id="countArticles" resultType="Integer">
+        select count(aId) from rt_articles;
+    </select>
+
+
+
+
+
+</mapper>

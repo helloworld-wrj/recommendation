@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="or.wr.bookrecommendationsystem.mapper.BookMapper">
+    <select id="findAllClassification" resultType="Classification">
+        select c.cId, c.value, c.symbolImgUrl from rt_classification c
+    </select>
+
+    <select id="findCoverPhotoPath" parameterType="Integer"  resultType="String">
+        select coverPhotoPath from rt_books where bId = #{bId}
+    </select>
+
+    <select id="findBidByNameAndAuthor" parameterType="String" resultType="Integer">
+        select bId from rt_books where name = #{name} and author = #{author}
+    </select>
+
+    <select id="findBooksByFive" parameterType="Book" resultType="Book">
+        select bId, name, author,cId, publication, publicationDate from rt_books where bId = #{bId} or name = #{name} or author = #{author} or cId = #{cId}
+            or publication = #{publication} or publicationDate = #{publicationDate}
+    </select>
+
+    <insert id="addBook" parameterType="Book">
+        insert into rt_books(name,author,cId,publication,publicationDate,coverPhotoUrl,coverPhotoPath,digest)
+            values(#{name},#{author},#{cId},#{publication},#{publicationDate},#{coverPhotoUrl},#{coverPhotoPath},#{digest})
+    </insert>
+
+    <delete id="deleteOneBookByBId" parameterType="Integer">
+        delete from rt_books where bId = #{bId}
+    </delete>
+
+    <update id="updateByBId" parameterType="Book">
+        update rt_books set name = #{name}, author=#{author},cId = #{cId},publication = #{publication},
+            publicationDate = #{publicationDate},digest = #{digest} where bId = #{bId}
+    </update>
+
+    <select id="findBookByBId" parameterType="Integer" resultType="Book">
+        select * from rt_books where bId = #{bId}
+    </select>
+
+    <select id="findLatestBook" resultType="Book">
+        select * FROM rt_books order by bId desc limit 0,1 ;
+    </select>
+
+    <select id="findBookByDynamic" resultType="Book" parameterType="Integer">
+        select * FROM rt_books order by bId desc limit ${page},2
+    </select>
+
+    <select id="countBooks" resultType="Integer">
+        select count(bId) from rt_books;
+    </select>
+
+    <select id="findBooksByCId" resultType="Book" parameterType="Integer">
+        select * from rt_books where cId = #{cId}
+    </select>
+
+    <select id="findBooksByLikeKey" resultType="Book" parameterType="String">
+        select * from rt_books where name like CONCAT('%',#{key},'%') or author like CONCAT('%',#{key},'%')
+    </select>
+</mapper>

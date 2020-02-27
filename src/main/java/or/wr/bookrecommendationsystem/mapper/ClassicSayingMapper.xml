@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="or.wr.bookrecommendationsystem.mapper.ClassicSayingMapper">
+    <insert id="setClassicSayingMapper" parameterType="String">
+       insert into rt_classicSayings(content, provenance) values(#{content}, #{provenance})
+    </insert>
+
+    <select id="findClassicSaying" resultType="ClassicSaying">
+         select * FROM rt_classicSayings order by id desc limit 0,1 ;
+    </select>
+
+</mapper>

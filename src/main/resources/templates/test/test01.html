@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>表格测试</title>
+    <script src="../js/jquery-3.4.1.js"></script>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.4.1/jquery.js}"></script>
+
+    <style>
+        html,body,input{margin: 0;padding: 0;}
+        .main{width: 80%; margin: auto;}
+
+        table{width:1000px;table-layout:fixed;}
+        table, tr, th, td{ border: 1px solid #ccc; padding: 0;margin: 0; border-collapse: collapse;}
+        th{background-color:#F5F5F5;}
+        th, td{width: 180px;height: 35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis}
+        .tb-ch{width: 60px;}
+        .tb-di-ch{width: 50px;height: 30px; margin: 5px auto auto;}
+        .input-ch{width: 50px;height: 28px;margin: auto;}
+
+
+        .di-digest-te{width: 50%;margin: 30px auto auto; text-align: center; display: none;}
+        .di-digest-te textarea{width: 100%; height: 300px; padding: 10px; font-size: 18px;}
+
+    </style>
+    <script src="../../static/js/jquery-3.4.1.js"></script>
+    <script>
+        $(function () {
+
+
+            $("#add").click(function () {
+                let a = $("table").find("tr").length;
+
+                let ta = "<tr>\n" +
+            "                <td class = \"tb-ch\" t-test = \"113\"><div class=\"tb-di-ch\"><input class = \"input-ch\" type=\"checkbox\"></div></td>\n" +
+            "                <td contenteditable=\"true\">"+(a-1)+"</td>\n" +
+            "                <td contenteditable=\"true\"></td>\n" +
+            "                <td contenteditable=\"true\"></td>\n" +
+            "                <td contenteditable=\"true\"></td>\n" +
+            "                <td contenteditable=\"true\"></td>\n" +
+            "                <td ondblclick = \"bClickTest(this);\" ></td>\n" +
+            "                <td><input type='file'></td>\n" + "</tr>";
+                // $("table").find("tr").eq(a-1).after(ta);
+                $("tbody").append(ta);
+
+            });
+            $("#delete").click(function () {
+                // let a = $("table").find("tr").length;
+                // $("table").find("tr").eq(a-1).remove();
+
+                let ar = [];
+                $(".input-ch").each(function () {
+                   if ( $(this).is(':checked')){
+                       ar.push($(this).parent().parent().parent().index());
+                       // console.log("现处在："+$(this).parent().parent().parent().index())
+                   }
+
+                });
+                console.log(ar+"==="+ar.length);
+                for (let i = ar.length; i > 0; i--){
+                    $("tbody").find("tr").eq(ar[i-1]).remove();
+                    console.log("delete the " + ar[i-1]);
+                }
+
+            });
+
+            $("#digest-out").click(function () {
+                $(".main").css("display","block");
+                $(".di-digest-te").css("display","none");
+            });
+
+            $("#digest-in").click(function () {
+
+                let index = $(".di-digest-te").attr("value");
+                console.log("get " + index);
+                let digest = $(".text-area").val();
+                console.log(digest);
+                if (digest.length>0){
+                    $("tbody").find("tr").eq(index).find("td").eq(6).text(digest);
+                    $(".text-area").val("");
+                }
+                $(".main").css("display","block");
+                $(".di-digest-te").css("display","none");
+
+            });
+
+            $("#insertAll").click(function () {
+                let allBooks = [];
+                let coverPhoto = [];
+                let formData = new FormData();
+                let a ="[";
+                $("tbody").find("tr").each(function () {
+                    /*allBooks.push({"name":$(this).find("td").eq(1).text(),
+                            "author":$(this).find("td").eq(2).text(),
+                            "classification":$(this).find("td").eq(3).text(),
+                            "publication":$(this).find("td").eq(4).text(),
+                            "publicationDate":$(this).find("td").eq(5).text(),
+                            "digest":$(this).find("td").eq(6).text(),
+                            });*/
+                    a+="{"
+                    a+="\"name\":\""+ $(this).find("td").eq(1).text()+
+                            "\",\"author\":\""+$(this).find("td").eq(2).text()+
+                            "\",\"classification\":\""+$(this).find("td").eq(3).text()+
+                            "\",\"publication\":\""+$(this).find("td").eq(4).text()+
+                            "\",\"publicationDate\":\""+$(this).find("td").eq(5).text()+
+                            "\",\"digest\":\""+$(this).find("td").eq(6).text();
+                            a+="\"\},";
+                    formData.append("coverPhotos",$(this).find("td").eq(7).find("input")[0].files[0]);
+                });
+                a+="]";
+                console.log("all books : " + a);
+                formData.append("books",a);
+                $.ajax({
+                    type: "POST",           //因为是传输文件，所以必须是post
+                    url: 'test01AddBooks',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        alert(data);
+
+                    }
+                });
+
+
+            })
+
+
+
+        })
+
+        function bClickTest(e) {
+            let bu = $(e);
+            console.log(bu.parent().index());
+            console.log(bu.text());
+            $(".main").css("display","none")
+            $(".text-area").val(bu.text());
+            $(".di-digest-te").css("display","block");
+            $(".di-digest-te").attr("value",bu.parent().index());
+
+        }
+
+
+    </script>
+
+</head>
+<body>
+    <div class="main">
+<!--        <form action="test01AddBooks" method="post" enctype="multipart/form-data">-->
+        <button id = "add" type="button">添加一行</button>
+        <button id = "delete" type="button">删除选定行</button>
+        <button id = "insertAll">一键添加</button><span>编辑需要严格遵守格式，不换行，日期2000-00-00，摘要添加修改需要双击，不支持选定添加</span>
+        <table id = "tab-test">
+            <thead>
+                <tr>
+                    <th class = "tb-ch"></th>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>分类</th>
+                    <th>出版社</th>
+                    <th>出版时间</th>
+                    <th>摘要</th>
+                    <th>封面图片</th>
+                </tr>
+            </thead>
+            <tbody>
+            <!--<tr>
+                <td class = "tb-ch" t-test = "113"><div class="tb-di-ch"><input class = "input-ch" ta-data="1" type="checkbox"></div></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><button class = "addDigest"  value="0" onclick="clickTest(this);">添加摘要</button></td>
+            </tr>-->
+
+            </tbody>
+        </table>
+
+<!--        </form>-->
+    </div>
+    <div class="di-digest-te" value = "">
+        <textarea class="text-area" maxlength="200"></textarea>
+
+        <button id = "digest-in">确定</button>
+        <button id = "digest-out">取消</button>
+
+    </div>
+</body>
+</html>
