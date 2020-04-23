@@ -11,7 +11,11 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
+<<<<<<< HEAD
+ Date: 23/04/2020 17:56:00
+=======
  Date: 15/04/2020 14:34:40
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 */
 
 SET NAMES utf8mb4;
@@ -32,7 +36,11 @@ CREATE TABLE `rt_acomments`  (
   INDEX `author`(`author`) USING BTREE,
   CONSTRAINT `rt_aComments_ibfk_1` FOREIGN KEY (`aId`) REFERENCES `rt_articles` (`aId`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `rt_aComments_ibfk_2` FOREIGN KEY (`author`) REFERENCES `rt_users` (`username`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_acomments
@@ -63,7 +71,11 @@ CREATE TABLE `rt_articles`  (
   PRIMARY KEY (`aId`) USING BTREE,
   INDEX `rt_articles_rt_classification_cId_fk`(`cId`) USING BTREE,
   CONSTRAINT `rt_articles_rt_classification_cId_fk` FOREIGN KEY (`cId`) REFERENCES `rt_classification` (`cId`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_articles
@@ -92,7 +104,11 @@ CREATE TABLE `rt_articlesindex`  (
   PRIMARY KEY (`aiId`) USING BTREE,
   UNIQUE INDEX `aId`(`aId`) USING BTREE,
   CONSTRAINT `rt_articlesindex_ibfk_1` FOREIGN KEY (`aId`) REFERENCES `rt_articles` (`aId`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_articlesindex
@@ -122,7 +138,11 @@ CREATE TABLE `rt_bcomments`  (
   INDEX `author`(`author`) USING BTREE,
   CONSTRAINT `rt_bComments_ibfk_1` FOREIGN KEY (`bId`) REFERENCES `rt_books` (`bId`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `rt_bComments_ibfk_2` FOREIGN KEY (`author`) REFERENCES `rt_users` (`username`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_bcomments
@@ -148,7 +168,11 @@ CREATE TABLE `rt_books`  (
   PRIMARY KEY (`bId`) USING BTREE,
   INDEX `rt_books_rt_classification_cId_fk`(`cId`) USING BTREE,
   CONSTRAINT `rt_books_rt_classification_cId_fk` FOREIGN KEY (`cId`) REFERENCES `rt_classification` (`cId`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_books
@@ -192,7 +216,11 @@ CREATE TABLE `rt_classicsayings`  (
   `content` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `provenance` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_classicsayings
@@ -211,7 +239,11 @@ CREATE TABLE `rt_classification`  (
   PRIMARY KEY (`cId`) USING BTREE,
   UNIQUE INDEX `value`(`value`) USING BTREE,
   UNIQUE INDEX `value_2`(`value`) USING BTREE
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_classification
@@ -272,7 +304,11 @@ CREATE TABLE `rt_retologinusers`  (
   INDEX `reAid`(`reAid`) USING BTREE,
   CONSTRAINT `rt_retologinusers_ibfk_1` FOREIGN KEY (`username`) REFERENCES `rt_users` (`username`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `rt_retologinusers_ibfk_2` FOREIGN KEY (`reAid`) REFERENCES `rt_articles` (`aId`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_retologinusers
@@ -287,6 +323,14 @@ INSERT INTO `rt_retologinusers` VALUES (7, 'test02', 2, 11);
 INSERT INTO `rt_retologinusers` VALUES (8, 'test02', 3, 23);
 INSERT INTO `rt_retologinusers` VALUES (9, 'test02', 4, 8);
 INSERT INTO `rt_retologinusers` VALUES (10, 'test02', 5, 15);
+<<<<<<< HEAD
+INSERT INTO `rt_retologinusers` VALUES (16, 'test03', 1, 11);
+INSERT INTO `rt_retologinusers` VALUES (17, 'test03', 2, 23);
+INSERT INTO `rt_retologinusers` VALUES (18, 'test03', 3, 22);
+INSERT INTO `rt_retologinusers` VALUES (19, 'test03', 4, 21);
+INSERT INTO `rt_retologinusers` VALUES (20, 'test03', 5, 15);
+=======
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Table structure for rt_test
@@ -315,7 +359,11 @@ CREATE TABLE `rt_tusers`  (
   `tcode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `validity` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_tusers
@@ -323,6 +371,11 @@ CREATE TABLE `rt_tusers`  (
 INSERT INTO `rt_tusers` VALUES (1, 'test01', 'w1285528700@163.com', '605818', '106814476');
 INSERT INTO `rt_tusers` VALUES (3, 'test02', '1285528700@qq.com', '763352', '174263991');
 INSERT INTO `rt_tusers` VALUES (4, 'test02', '185528700@qq.com', '008076', '174236265');
+<<<<<<< HEAD
+INSERT INTO `rt_tusers` VALUES (5, '中文用户名', '123456789@test.com', '091071', '891501522');
+INSERT INTO `rt_tusers` VALUES (6, 'test03', '1234512345@test.com', '000483', '891627512');
+=======
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Table structure for rt_userdesk
@@ -364,7 +417,11 @@ CREATE TABLE `rt_userhabit`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `username`(`username`) USING BTREE,
   CONSTRAINT `rt_userhabit_ibfk_1` FOREIGN KEY (`username`) REFERENCES `rt_users` (`username`) ON DELETE RESTRICT ON UPDATE RESTRICT
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 77 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_userhabit
@@ -407,6 +464,28 @@ INSERT INTO `rt_userhabit` VALUES (35, 'test01', 16, 0, 0, 0, 0);
 INSERT INTO `rt_userhabit` VALUES (36, 'test01', 17, 0, 0, 0, 0);
 INSERT INTO `rt_userhabit` VALUES (37, 'test01', 18, 0, 0, 0, 0);
 INSERT INTO `rt_userhabit` VALUES (38, 'test01', 19, 0, 0, 0, 0);
+<<<<<<< HEAD
+INSERT INTO `rt_userhabit` VALUES (134, 'test03', 1, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (135, 'test03', 2, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (136, 'test03', 3, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (137, 'test03', 4, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (138, 'test03', 5, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (139, 'test03', 6, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (140, 'test03', 7, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (141, 'test03', 8, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (142, 'test03', 9, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (143, 'test03', 10, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (144, 'test03', 11, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (145, 'test03', 12, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (146, 'test03', 13, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (147, 'test03', 14, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (148, 'test03', 15, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (149, 'test03', 16, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (150, 'test03', 17, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (151, 'test03', 18, 0, 0, 0, 0);
+INSERT INTO `rt_userhabit` VALUES (152, 'test03', 19, 0, 0, 0, 0);
+=======
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Table structure for rt_users
@@ -420,13 +499,21 @@ CREATE TABLE `rt_users`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `username`(`username`) USING BTREE,
   UNIQUE INDEX `email`(`email`) USING BTREE
+<<<<<<< HEAD
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+=======
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Records of rt_users
 -- ----------------------------
 INSERT INTO `rt_users` VALUES (1, 'test01', 'w1285528700@163.com', 'CF814721358D09942B255746542AD2A4');
 INSERT INTO `rt_users` VALUES (3, 'test02', '1285528700@qq.com', 'CF814721358D09942B255746542AD2A4');
+<<<<<<< HEAD
+INSERT INTO `rt_users` VALUES (10, 'test03', '123456789@test.com', 'CF814721358D09942B255746542AD2A4');
+=======
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
 
 -- ----------------------------
 -- Triggers structure for table rt_articles
@@ -491,9 +578,15 @@ CREATE TRIGGER `autoAddToUHR` AFTER INSERT ON `rt_users` FOR EACH ROW begin
             set a = a +1;
         end while;
     while b < 6 do
+<<<<<<< HEAD
+            select aId into c from rt_reArticles where reIndex = b;
+            insert into rt_reToLoginUsers(username,reIndex,reAid) values(u,b,c);
+            set b = b + 1;
+=======
         select aId into c from rt_rearticles where reIndex = b;
         insert into rt_reToLoginUsers(username,reIndex,reAid) values(username,b,c);
         set b = b + 1;
+>>>>>>> 10cebaef08f528ac288644f6c4a0793cbfaee415
         end while;
 end
 ;;
