@@ -3,10 +3,7 @@ package or.wr.bookrecommendationsystem.controller;
 import or.wr.bookrecommendationsystem.entity.Article;
 import or.wr.bookrecommendationsystem.entity.Book;
 import or.wr.bookrecommendationsystem.entity.Classification;
-import or.wr.bookrecommendationsystem.mapper.ArticleMapper;
-import or.wr.bookrecommendationsystem.mapper.BookMapper;
-import or.wr.bookrecommendationsystem.mapper.ClassicSayingMapper;
-import or.wr.bookrecommendationsystem.mapper.CommentMapper;
+import or.wr.bookrecommendationsystem.mapper.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +33,9 @@ public class PageController {
 
     @Resource
     private CommentMapper commentMapper;
+
+    @Resource
+    private RecommendationMapper recommendationMapper;
 
 
 
@@ -89,12 +89,16 @@ public class PageController {
     @RequestMapping("/browserArticle")
     public ModelAndView toBrowserArticle(String aId){
         int iaId = Integer.parseInt(aId);
+        new Thread(()->{
+            recommendationMapper.addArHisByAid(iaId);
+        }).start();
         Article article = articleMapper.findTitleByAId(iaId);
         System.out.println(article);
-
+        System.out.println("click the article wit id  " + iaId );
         ModelAndView modelAndView = new ModelAndView("browserArticle");
         modelAndView.addObject("article",article);
         modelAndView.addObject("aComments",commentMapper.findAllACommentByAId(iaId));
+
         return modelAndView;
     }
     @RequestMapping("/getContent")
@@ -149,6 +153,11 @@ public class PageController {
         int b = Integer.parseInt(sBId);
 //        System.out.println("查看的图书bId是：" + b);
         Book book = bookMapper.findBookByBId(b);
+
+        if (request.getSession().getAttribute("user")!=null){
+            String username = request.getSession().getAttribute("user").toString();
+            recommendationMapper.addCHits(username,bookMapper.findCIdByBId(b));
+        }
 
         ModelAndView modelAndView = new ModelAndView("/browserBook");
         modelAndView.addObject("book",book);

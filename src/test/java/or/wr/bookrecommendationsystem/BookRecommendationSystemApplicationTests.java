@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+
 @SpringBootTest
 class BookRecommendationSystemApplicationTests {
 
@@ -12,11 +14,8 @@ class BookRecommendationSystemApplicationTests {
 
     @Test
     void contextLoads() {
-        logger.trace("this is trace");
-        logger.debug("this is debug");
-        logger.info("this is info");
-        logger.warn("this is warm");
-        logger.error("this is error");
+
+
     }
 
 }

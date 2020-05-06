@@ -5,6 +5,7 @@ import or.wr.bookrecommendationsystem.entity.Book;
 import or.wr.bookrecommendationsystem.entity.BookComment;
 import or.wr.bookrecommendationsystem.impl.MailService;
 import or.wr.bookrecommendationsystem.mapper.*;
+import org.junit.Test;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,8 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 //控制注册登录、以及用户登录后的页面
@@ -40,10 +43,15 @@ public class UserController {
     private ClassicSayingMapper classicSayingMapper;
     @Resource
     private CommentMapper commentMapper;
+    @Resource
+    private RecommendationMapper recommendationMapper;
 
     @RequestMapping({"/","index"})
-    public ModelAndView toIndex(){
-
+    public ModelAndView toIndex(HttpServletRequest request){
+        if (request.getSession().getAttribute("user")!=null){
+            System.out.println("进行用户登录推荐");
+            return getIndexInfoByLogin(request.getSession().getAttribute("user").toString());
+        }
         return getIndexInfo();
     }
 
@@ -132,7 +140,7 @@ public class UserController {
                 account = userMapper.findUsernameByEmail(account);
 //                System.out.println("email 已经设置 session " + account);
                 session.setAttribute("user",account);
-                return getIndexInfo();
+                return getIndexInfoByLogin(request.getSession().getAttribute("user").toString());
             }
         }else if(mark.equals("username")){
             if (encryptionThree(password).equals(userMapper.checkPasswordByUsername(account))){
@@ -140,7 +148,7 @@ public class UserController {
 //                System.out.println("username 已经设置 session " + account);
                 session.setAttribute("user",account);
 
-                return getIndexInfo();
+                return getIndexInfoByLogin(request.getSession().getAttribute("user").toString());
             }
         }
         ModelAndView mav = new ModelAndView("login");
@@ -164,6 +172,7 @@ public class UserController {
         return modelAndView;
     }
 
+    //收藏图书
     @RequestMapping("user/addMyDesk")
     @ResponseBody
     public HashMap<String,String> addMyDesk(HttpServletRequest request){
@@ -176,6 +185,7 @@ public class UserController {
 //            System.out.println(bId+"-----"+user);
             if (userMapper.findBIdByUserFDesk(user,bId)<1){
                 userMapper.addBookToDesk(user,bId);
+                recommendationMapper.addCBookIndex(user,bookMapper.findCIdByBId(bId));
 //                System.out.println("add to desk successfully user is " + user);
             }
             map.put("mark","true");
@@ -192,9 +202,11 @@ public class UserController {
     public ModelAndView removeFromDesk(String bId, HttpServletRequest request){
         int ibId = Integer.parseInt(bId);
         String user = request.getSession().getAttribute("user").toString();
+        recommendationMapper.deleteCBookIndex(user,bookMapper.findCIdByBId(ibId));
         userMapper.deleteDBookByBIdFDesk(user,ibId);
         ModelAndView modelAndView = new ModelAndView("user/myDesk");
         modelAndView.addObject("books",findDeskBooks(user));
+        modelAndView.addObject("userMark","yes");
         return modelAndView;
     }
 
@@ -319,11 +331,13 @@ public class UserController {
         int aId = Integer.parseInt(request.getParameter("aId"));
 //        System.out.println("bId is " + bId + " the comment is " + cmComment);
         if (commentMapper.addArticleComment(new ArticleComment(cmComment,aId,username)) > 0){
+            recommendationMapper.addArCommentsIndexByAid(aId);
             map.put("result","评论成功");
             map.put("mark","true");
         }else {
             map.put("result","评论失败");
             map.put("mark","false");
+
         }
         return map;
     }
@@ -373,6 +387,7 @@ public class UserController {
     /*复用数据提取*/
     //1、游客浏览，用户登录后，首页数据
     public ModelAndView getIndexInfo(){
+        setIndexInfoBySystem();
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("first",articleMapper.selectToUpdate(articleMapper.findAIdFromReArticle(1)));
         modelAndView.addObject("second",articleMapper.selectToUpdate(articleMapper.findAIdFromReArticle(2)));
@@ -381,14 +396,96 @@ public class UserController {
         modelAndView.addObject("fifth",articleMapper.selectToUpdate(articleMapper.findAIdFromReArticle(5)));
         modelAndView.addObject("classicSaying",classicSayingMapper.findClassicSaying());
         modelAndView.addObject("latestBook",bookMapper.findLatestBook());
+//        setIndexInfoBySystem();
         return modelAndView;
     }
+
+    //推荐实现，未登录，最热门的一篇，最新的四篇
+    public void setIndexInfoBySystem(){
+        int mpAid = recommendationMapper.findMostPopularAId();
+        int[] a = articleMapper.findFourLastAid(mpAid);
+//        System.out.println("the most popular article is " + mpAid);
+//        Arrays.stream(a).forEach(i -> System.out.print(i + ", "));
+        articleMapper.setReArticle(1,mpAid,1);
+        for (int i = 2; i < 6; i++){
+            articleMapper.setReArticle(i,a[i-2],i);
+        }
+
+    }
+
+    /*推荐实现，针对已经登录用户，推荐三篇，最热门的一篇，最新一篇*/
+    //针对用户登录后
+    public ModelAndView getIndexInfoByLogin(String username){
+        setIndexInfoForUsers(username);
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("first",articleMapper.selectToUpdate(recommendationMapper.findReAidByReIndexAndUser(1,username)));
+        modelAndView.addObject("second",articleMapper.selectToUpdate(recommendationMapper.findReAidByReIndexAndUser(2,username)));
+        modelAndView.addObject("third",articleMapper.selectToUpdate(recommendationMapper.findReAidByReIndexAndUser(3,username)));
+        modelAndView.addObject("fourth",articleMapper.selectToUpdate(recommendationMapper.findReAidByReIndexAndUser(4,username)));
+        modelAndView.addObject("fifth",articleMapper.selectToUpdate(recommendationMapper.findReAidByReIndexAndUser(5,username)));
+        modelAndView.addObject("classicSaying",classicSayingMapper.findClassicSaying());
+        modelAndView.addObject("latestBook",bookMapper.findLatestBook());
+        return modelAndView;
+    }
+
+    public void setIndexInfoForUsers(String username){
+//        if (recommendationMapper.checkNumbersOfReAid(username)!=0){
+        //有 bug
+            for(int i = 1, j = 5; i < 6; i++){
+                /* 当删除的文章涉及登录用户推荐表时，重新从默认推荐表获取*/
+                recommendationMapper.updateKeepNewReAid(j--,articleMapper.findAIdFromReArticle(i),username);
+                //优化 failure
+                /*System.out.println(recommendationMapper.findAllReAidByUsername(username).length);
+                Set existReAid = Stream.of(recommendationMapper.findAllReAidByUsername(username))
+                        .collect(Collectors.toSet());
+                existReAid.stream().forEach(System.out::println);
+                int existNumbers = existReAid.size();
+                while (existNumbers < 5){
+                    recommendationMapper.updateReAidByNull(username,articleMapper.findLatestAIdByReLoginUser(username));
+                }*/
+
+            }
+//        }
+//        else if(recommendationMapper.checkNewUser(username)>0){
+            int[] cIds = recommendationMapper.findTopCIndexByUsername(username);
+            int[] existReAid = recommendationMapper.findAllReAidByUsername(username);
+//            Arrays.stream(existReAid).forEach(i -> System.out.print(i + ","));
+            for (int i = 0, j = 1; i < cIds.length; i++) {
+                if (articleMapper.countArticlesNumsByCid(cIds[i]) != 0){
+                    int a = articleMapper.findLatestAidByCid(cIds[i]);
+                    int temp = recommendationMapper.findReAidByReIndexAndUser(j,username);
+                    if (IntStream.of(existReAid).noneMatch(k -> k == a)){
+//                        System.out.println("change");
+                        recommendationMapper.updateReAidToRLU(6-j,username,temp);
+                        recommendationMapper.updateReAidToRLU(j,username,a);
+                    }
+                    j++;
+                }
+
+            }
+
+//        }
+    }
+    @Test
+    public void test01(){
+        int[] a = {1,2,4,5,6};
+        if (IntStream.of(a).anyMatch(i -> i !=9)){
+            System.out.println("no exist");
+        }
+        System.out.println(IntStream.of(a).anyMatch(i -> i==1));
+        System.out.println(IntStream.of(a).anyMatch(i -> i!=1));
+        System.out.println(IntStream.of(a).anyMatch(i -> i==3));
+        System.out.println(IntStream.of(a).noneMatch(i -> i==3));
+        System.out.println(IntStream.of(a).noneMatch(i -> i!=3));
+    }
+
+
     //2、每次打开书桌获取的数据
     public ArrayList<Book> findDeskBooks(String user){
 
-        ArrayList list = userMapper.findAllBIdByUserFDesk(user);
+        ArrayList<Integer> list = userMapper.findAllBIdByUserFDesk(user);
 //        System.out.println(list.size());
-        ArrayList<Book> books = new ArrayList<Book>();
+        ArrayList<Book> books = new ArrayList<>();
         for (Object o : list) {
             books.add(bookMapper.findBookByBId(Integer.parseInt(o.toString())));
         }
@@ -403,5 +500,8 @@ public class UserController {
         modelAndView.addObject("aComments",commentMapper.findAllACommentByAuthor(username));
         return modelAndView;
     }
+
+
+
 
 }

@@ -36,6 +36,14 @@ public interface CommentMapper {
     @Delete("delete from rt_aComments where cmId = #{id}")
     int deleteACommentById(int id);
 
+    //count the number of comments on articles
+    @Select("select count(cmContent) from rt_aComments where aId = #{id} ")
+    int countACommentsById(int id);
+
+    //count the number of comments on books
+    @Select("select count(cmContent) from rt_bComments where bId = #{id} ")
+    int countBCommentsById(int id);
+
 
 
 }

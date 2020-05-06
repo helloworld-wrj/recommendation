@@ -12,13 +12,13 @@ public class FileService {
         return arContentFileDir;
     }
 
-/*    private String boCoverPhotoDir = "D:/1/2/apache-tomcat-9.0.22-test/webapps/recommendation/imgs/bookCoverImgs/";
+/*    private String boCoverPhotoDir = "D:/1/2/apache-tomcat-9.0.22-test/projects/recommendation/imgs/bookCoverImgs/";
 
     private String boCoverPhotoPre = "http://localhost:8081/recommendation/imgs/bookCoverImgs/";
 
     private String arContentFileDir = "E:/projects/ideaProjects/recommendation/articles/";
 
-    private String arCoverPhotoDir = "D:/1/2/apache-tomcat-9.0.22-test/webapps/recommendation/imgs/articleCoverImgs/";
+    private String arCoverPhotoDir = "D:/1/2/apache-tomcat-9.0.22-test/projects/recommendation/imgs/articleCoverImgs/";
 
     private String arCoverPhotoPre = "http://localhost:8081/recommendation/imgs/articleCoverImgs/";*/
 
@@ -55,6 +55,7 @@ public class FileService {
         try(OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(dir+fileName))) {
             outputStream.write(file.getBytes());
             outputStream.flush();
+            System.out.println("the image has save ");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("上传失败");

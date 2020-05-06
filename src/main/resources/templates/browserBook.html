@@ -29,8 +29,10 @@
 
             }
 
+
             let bId = "bId=" + $(".bId").val();
             let ctxPath = [[${#request.getContextPath()}]];//相当于当前项目跟路径
+
 
             $(".bt-addBookToDesk").click(function () {
                 $.ajax({
@@ -73,6 +75,18 @@
 
             });
 
+            let interval = window.setTimeout(function() {
+                console.log('20秒钟之后执行了');
+                $.ajax({
+                    url:"recommend/addCBrowseIndex",
+                    data:{cId:$('#cId').val()},
+                    success:function () {
+                        console.log("addCBrowseIndex has send")
+                    }
+                });
+                clearInterval(interval);
+            },20000);
+
 
         })
     </script>
@@ -81,6 +95,7 @@
 <div th:replace="public/ordinaryNav::nav"></div>
 
 <input class="userMark" type="hidden" th:value="${userMark}">
+<input id = "cId" type="hidden" th:value="${book.cId}">
     <div class="di-m-bb">
         <h1 th:text="${book.getName()}"></h1>
         <img th:src="${book.getCoverPhotoUrl()}">

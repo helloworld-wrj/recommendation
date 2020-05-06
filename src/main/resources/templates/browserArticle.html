@@ -30,13 +30,24 @@
     <script>
         $(function () {
             let requestData = "aId="+$(".ba-in-aId").val();
-            console.log("异步请求发送！！！");
+            // console.log("异步请求发送！！！");
             $.ajax({
                 type: "GET",
                 url: "getContent",
                 data: requestData,
                 dataType:"html",
                 success: function (data) {
+                    let interval = window.setTimeout(function() {
+                        console.log('20秒钟之后执行了');
+                        $.ajax({
+                            url:"recommend/addArBrowseIndex",
+                            data:requestData,
+                            success:function () {
+                                console.log("addArBrowseIndex has send")
+                            }
+                        });
+                        clearInterval(interval);
+                    },20000);
                     // console.log(data.length);
                     let content = $(".br-mg-showContent");
                     content.html(data);

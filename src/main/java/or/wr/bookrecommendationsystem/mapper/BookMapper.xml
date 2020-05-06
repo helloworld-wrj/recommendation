@@ -51,10 +51,14 @@
     </select>
 
     <select id="findBooksByCId" resultType="Book" parameterType="Integer">
-        select * from rt_books where cId = #{cId}
+        select * from rt_books where cId = #{cId} limit 0, 99;
     </select>
 
     <select id="findBooksByLikeKey" resultType="Book" parameterType="String">
         select * from rt_books where name like CONCAT('%',#{key},'%') or author like CONCAT('%',#{key},'%')
+    </select>
+
+    <select id="findCIdByBId" parameterType="Integer" resultType="Integer">
+        select cId from rt_books where bId = #{bId};
     </select>
 </mapper>

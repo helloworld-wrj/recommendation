@@ -130,7 +130,7 @@
 			<div class="agile-field-txt">
 				<div class = "dMsg" th:text="${rMsg}"></div>
 				<label> Username</label>
-				<input type="text" id = "username" name="username" placeholder="Enter User Name" required="" maxlength="16" />
+				<input type="text" id = "username" name="username" placeholder="Enter User Name" required="" maxlength="16" minlength="4"/>
 				<span class="u-msg" id = "u-msg">The username already exists</span>
 			</div>
 			
@@ -148,7 +148,7 @@
 			
 			<div class="agile-field-txt">
 				<label> password</label>
-				<input type="password" name="password" placeholder="Enter Password" required="" id="myInput"  maxlength="16" />
+				<input type="password" name="password" placeholder="Enter Password" required="" id="myInput"  maxlength="16" minlength="10"/>
 				<div class="agile_label">
 					<input id="check3" name="check3" type="checkbox" value="show password" onclick="myFunction()">
 					<label class="check" for="check3">Show password</label>

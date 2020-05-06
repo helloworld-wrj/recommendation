@@ -5,9 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import or.wr.bookrecommendationsystem.entity.Article;
 import or.wr.bookrecommendationsystem.entity.BatchBook;
 import or.wr.bookrecommendationsystem.entity.Book;
-import or.wr.bookrecommendationsystem.mapper.ArticleMapper;
-import or.wr.bookrecommendationsystem.mapper.BookMapper;
-import or.wr.bookrecommendationsystem.mapper.ClassicSayingMapper;
+import or.wr.bookrecommendationsystem.mapper.*;
 import or.wr.bookrecommendationsystem.server.FileService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -39,6 +37,12 @@ public class ManagerController {
 
     @Resource
     private ClassicSayingMapper classicSayingMapper;
+
+    @Resource
+    private RecommendationMapper recommendationMapper;
+
+    @Resource
+    private CommentMapper commentMapper;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -250,7 +254,6 @@ public class ManagerController {
 //        System.out.println(saveStr[0].length());
         articleMapper.addArticle(new Article(title,Integer.parseInt(cId), fileService.getArContentFileDir()
                 +articleIdentification+".html",saveStr[0],saveStr[1],digest,articleIdentification));
-
         return "manager/index";
     }
     //1.2 正文保存
@@ -308,6 +311,7 @@ public class ManagerController {
         return modelAndView;
     }
 
+    //文章删除
     @RequestMapping(value = "/deleteArticle",method = RequestMethod.POST)
     @ResponseBody
     public String deleteArticle(HttpServletRequest request){
@@ -324,7 +328,11 @@ public class ManagerController {
         System.out.println("要删除的文章封面正文文件路径是："+ contentPath);
         fileService.deleteFileByPath(contentPath);
         fileService.deleteFileByPath(coverPhotoPath);
+        recommendationMapper.deleteArCommentsIndexByAid(a);
+        recommendationMapper.deleteReAid(a);
+        commentMapper.deleteACommentById(a);
         articleMapper.deleteArticleByAId(a);
+
         return "操作成功";
     }
 

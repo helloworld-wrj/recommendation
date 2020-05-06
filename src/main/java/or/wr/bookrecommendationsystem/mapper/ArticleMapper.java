@@ -1,6 +1,7 @@
 package or.wr.bookrecommendationsystem.mapper;
 
 import or.wr.bookrecommendationsystem.entity.Article;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -42,11 +43,30 @@ public interface ArticleMapper {
     //根据reIndex从推荐表查找aId
     int findAIdFromReArticle(int reIndex);
 
-
-
     Article findArticleDynamic(int page);
 
     int countArticles();
+
+
+    /*查找除了指定aId外最新的4个aId*/
+    @Select("select aId from rt_articles where aId != #{aId} order by aId desc limit 0, 4")
+    int[] findFourLastAid(int aId);
+
+    /*查找除了指定aId外最新的1个aId*/
+    @Select("select aId from rt_articles where aId != #{aId} order by aId desc limit 0, 1")
+    int findOneLastAid(int aId);
+
+    //查找一个不在指定用户推荐表中最新的aId
+    @Select("select aId from rt_articles where aId not in (select reAid from rt_reToLoginUsers where username = '#{username}' and reAid is not null) order by aId desc limit 0, 1;")
+    int findLatestAIdByReLoginUser(String username);
+
+    //根据cId查找最新的一篇文章的aId
+    @Select("select aId from rt_articles where cId = #{cId} order by aId desc limit 0,1")
+    int findLatestAidByCid(int cId);
+
+    //根据cId统计改类文章数
+    @Select("select count(aId) from rt_articles where cId = ${cId}")
+    int countArticlesNumsByCid(int cId);
 
 
 

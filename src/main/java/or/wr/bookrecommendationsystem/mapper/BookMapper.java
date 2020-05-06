@@ -37,5 +37,8 @@ public interface BookMapper {
     //根据书名、作者查找
     ArrayList<Book> findBooksByLikeKey(String key);
 
+    //根据BId查找分类
+    int findCIdByBId(int bId);
+
 
 }
